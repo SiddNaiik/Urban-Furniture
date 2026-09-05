@@ -209,7 +209,6 @@ export default function LoginPage() {
     </div>
   );
 }
-
 function EmailIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
@@ -218,7 +217,6 @@ function EmailIcon() {
     </svg>
   );
 }
-
 function LockIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
@@ -227,7 +225,6 @@ function LockIcon() {
     </svg>
   );
 }
-
 function EyeIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
@@ -236,7 +233,6 @@ function EyeIcon() {
     </svg>
   );
 }
-
 function EyeOffIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">

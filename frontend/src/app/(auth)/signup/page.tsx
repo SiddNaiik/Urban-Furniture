@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -7,13 +6,11 @@ import { signup } from "@/lib/api";
 
 export default function SignupPage() {
   const router = useRouter();
-
   const [name, setName] = useState("");
   const [loginId, setLoginId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -31,7 +28,6 @@ export default function SignupPage() {
     lowercase: /[a-z]/.test(password),
     special: /[^A-Za-z0-9]/.test(password),
   };
-
   const isPasswordValid =
     passwordRules.minLength &&
     passwordRules.uppercase &&
@@ -68,12 +64,10 @@ export default function SignupPage() {
       setError("Please enter your email address.");
       return;
     }
-
     if (!isPasswordValid) {
       setError("Please meet all password requirements.");
       return;
     }
-
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -105,7 +99,6 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
-
   return (
     <div className="w-full">
       {/* HEADER */}
@@ -263,13 +256,11 @@ export default function SignupPage() {
               {showConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
             </button>
           </div>
-
           {confirmPassword.length > 0 && !passwordsMatch && (
             <p className="mt-1.5 flex items-center gap-1 text-xs font-medium text-red-500">
               <span>✕</span> Passwords do not match
             </p>
           )}
-
           {passwordsMatch && (
             <p className="mt-1.5 flex items-center gap-1 text-xs font-medium text-[#6B705C]">
               <span>✓</span> Passwords match
@@ -300,7 +291,6 @@ export default function SignupPage() {
           >
             {loading ? "Creating Account..." : "Sign Up"}
           </button>
-
           <Link
             href="/login"
             className="flex h-12 items-center justify-center rounded-xl border border-[#DCD9D0] bg-white px-5 text-sm font-semibold text-[#2C2C2C] transition hover:bg-[#F8F6F1]"

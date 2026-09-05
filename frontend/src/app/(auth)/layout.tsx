@@ -6,9 +6,7 @@ export default function AuthLayout({
 }) {
   return (
     <main className="min-h-screen bg-[#F8F6F1] lg:grid lg:grid-cols-[55%_45%]">
-      {/* 
-          LEFT SIDE — STATIC
-       */}
+      {/*LEFT SIDE — STATIC*/}
       <section className="relative hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:overflow-hidden">
         {/* Furniture Background */}
         <div
@@ -22,7 +20,7 @@ export default function AuthLayout({
         />
         {/* Left Content */}
         <div className="relative z-10 flex h-full flex-col px-10 py-8 xl:px-14">
-          {/* ================= LOGO ================= */}
+          {/*LOGO*/}
           <Link
             href="/login"
             className="flex w-fit items-center gap-3"
@@ -43,7 +41,7 @@ export default function AuthLayout({
               </span>
             </div>
           </Link>
-          {/* ================= HERO ================= */}
+          {/*HERO*/}
           <div className="mt-16 max-w-3xl xl:mt-20">
             <h1 className="max-w-2xl text-[2.65rem] font-semibold leading-[1.08] tracking-[-0.035em] text-[#2C2C2C] xl:text-[3.2rem]">
               Beautiful Business.
@@ -56,7 +54,7 @@ export default function AuthLayout({
               effortlessly.
             </p>
           </div>
-          {/* ================= FEATURES ================= */}
+          {/*FEATURES*/}
           <div className="mt-auto pb-2 pt-10">
             <div className="grid grid-cols-4 gap-3 rounded-2xl border border-white/70 bg-[#F8F6F1]/90 p-4 shadow-[0_12px_40px_rgba(44,44,44,0.08)] backdrop-blur-md">
               <Feature
@@ -86,8 +84,7 @@ export default function AuthLayout({
           </div>
         </div>
       </section>
-      {/* 
-          RIGHT SIDE — SCROLLABLE FORM
+      {/*RIGHT SIDE — SCROLLABLE FORM
        */}
       <section className="min-h-screen bg-[#FCFBF8]">
         <div className="flex min-h-screen items-center justify-center px-6 py-10 sm:px-10">
