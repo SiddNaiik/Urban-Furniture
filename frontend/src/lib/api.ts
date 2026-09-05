@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getToken, removeToken } from './auth';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -32,13 +32,24 @@ apiClient.interceptors.response.use(
 );
 
 // Auth
-export async function login(email: string, password: string) {
-  const res = await apiClient.post('/auth/login/', { email, password });
+export async function login(login_id: string, password: string) {
+  const res = await apiClient.post('/api/auth/login', { login_id, password });
   return res.data;
 }
 
-export async function signup(name: string, email: string, password: string) {
-  const res = await apiClient.post('/auth/signup/', { name, email, password });
+export async function signup(data: { name: string; login_id: string; email: string; password: string }) {
+  const res = await apiClient.post('/api/auth/signup', data);
+  return res.data;
+}
+
+export async function getMe() {
+  const res = await apiClient.get('/api/auth/me');
+  return res.data;
+}
+
+// Dashboard Summary
+export async function getDashboardSummary() {
+  const res = await apiClient.get('/api/dashboard/summary');
   return res.data;
 }
 
