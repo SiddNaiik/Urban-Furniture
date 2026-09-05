@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Table from "@/components/ui/Table";
 import { formatCurrency } from "@/lib/utils";
 import { MOCK_SALES_ORDERS, MOCK_PURCHASE_ORDERS, MOCK_CUSTOMER_INVOICES, MOCK_PRODUCTS } from "@/lib/mockData";
+import {getPurchaseOrders, } from "@/lib/api"
 import { ui } from "@/lib/theme";
 
 /*
@@ -19,12 +20,24 @@ import { ui } from "@/lib/theme";
   const { data: purchaseOrders = MOCK_PURCHASE_ORDERS } = useFetch(getPurchaseOrders);
   const { data: invoices = MOCK_CUSTOMER_INVOICES } = useFetch(getCustomerInvoices);
 */
+type PurchaseOrder = {  id: number;  total: number; status: string};
 
 export default function DashboardPage() {
   const [sales] = useState(MOCK_SALES_ORDERS);
-  const [purchases] = useState(MOCK_PURCHASE_ORDERS);
+  const [purchases, setPurchases] = useState<PurchaseOrder[]>([]);
+
   const [invoices] = useState(MOCK_CUSTOMER_INVOICES);
   const [products] = useState(MOCK_PRODUCTS);
+
+  useEffect(() => {
+        async function loadPurchases() {
+            const data = await getPurchaseOrders();
+
+            setPurchases(data);
+        }
+
+        loadPurchases();
+    }, []);
 
   const totalSalesAmount = sales.reduce((sum, item) => sum + item.total, 0);
   const totalPurchaseAmount = purchases.reduce((sum, item) => sum + item.total, 0);
