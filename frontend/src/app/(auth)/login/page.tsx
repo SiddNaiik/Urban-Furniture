@@ -11,9 +11,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  /* 
-     LOGIN
-   */
+  /*LOGIN*/
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -87,9 +85,7 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
         className="mt-8 space-y-6"
       >
-        {/* ===================================================
-            EMAIL
-        =================================================== */}
+        {/* EMAIL*/}
         <div>
           <label
             htmlFor="email"
@@ -120,9 +116,7 @@ export default function LoginPage() {
             />
           </div>
         </div>
-        {/* ===================================================
-            PASSWORD
-        =================================================== */}
+        {/* PASSWORD*/}
         <div>
           <div className="mb-2 flex items-center justify-between">
             <label
@@ -182,17 +176,13 @@ export default function LoginPage() {
             </button>
           </div>
         </div>
-        {/* ===================================================
-            ERROR
-        =================================================== */}
+        {/* ERROR*/}
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
             {error}
           </div>
         )}
-        {/* ===================================================
-            REMEMBER ME
-        =================================================== */}
+        {/* REMEMBER ME*/}
         <label className="flex cursor-pointer items-center gap-3">
           <input
             type="checkbox"
@@ -206,9 +196,7 @@ export default function LoginPage() {
             Remember me
           </span>
         </label>
-        {/* ===================================================
-            LOGIN BUTTON
-        =================================================== */}
+        {/*LOGIN BUTTON*/}
         <button
           type="submit"
           className="h-14 w-full rounded-xl bg-[#6B705C] text-base font-semibold text-white shadow-sm transition hover:bg-[#59604E] focus:outline-none focus:ring-4 focus:ring-[#6B705C]/20 active:scale-[0.99]"
@@ -236,9 +224,7 @@ export default function LoginPage() {
     </div>
   );
 }
-/* ====
-   EMAIL ICON
-==== */
+/*EMAIL ICON*/
 function EmailIcon() {
   return (
     <svg
@@ -265,9 +251,7 @@ function EmailIcon() {
     </svg>
   );
 }
-/* ====
-   LOCK ICON
-==== */
+/*LOCK ICON */
 function LockIcon() {
   return (
     <svg
@@ -293,9 +277,7 @@ function LockIcon() {
     </svg>
   );
 }
-/* ====
-   EYE ICON
-==== */
+/*EYE ICON*/
 function EyeIcon() {
   return (
     <svg
@@ -318,9 +300,7 @@ function EyeIcon() {
     </svg>
   );
 }
-/* ====
-   EYE OFF ICON
-==== */
+/*EYE OFF ICON*/
 function EyeOffIcon() {
   return (
     <svg
