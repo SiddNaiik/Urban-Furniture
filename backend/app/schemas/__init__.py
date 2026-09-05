@@ -5,6 +5,11 @@ from app.schemas.auth import (
     UserResponse,
     UserSignupRequest,
 )
+from app.schemas.dashboard import (
+    BudgetSummary,
+    DashboardSummaryResponse,
+    OrderSummary,
+)
 
 __all__ = [
     "UserSignupRequest",
@@ -12,4 +17,7 @@ __all__ = [
     "LoginRequest",
     "UserResponse",
     "TokenResponse",
+    "OrderSummary",
+    "BudgetSummary",
+    "DashboardSummaryResponse",
 ]

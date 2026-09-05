@@ -1,129 +1,293 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { usePathname } from "next/navigation";
+// API: import { useAuth } from "@/context/AuthContext";
 
-const navGroups = [
+const NAV = [
   {
-    label: 'Overview',
+    group: "OVERVIEW",
+    items: [{ label: "Dashboard", href: "/dashboard", icon: DashIcon }],
+  },
+  {
+    group: "MASTER DATA",
     items: [
-      { href: '/dashboard', label: 'Dashboard', icon: '📊' },
+      { label: "Contacts", href: "/contacts", icon: ContactIcon },
+      { label: "Products", href: "/products", icon: ProductIcon },
+      { label: "Users",    href: "/users",    icon: UserIcon },
     ],
   },
   {
-    label: 'Master Data',
+    group: "ACCOUNTING",
     items: [
-      { href: '/contacts', label: 'Contacts', icon: '👥' },
-      { href: '/products', label: 'Products', icon: '📦' },
-      { href: '/users', label: 'Users', icon: '👤' },
+      { label: "Chart of Accounts",  href: "/chart-of-accounts",  icon: CoAIcon },
+      { label: "Journals",           href: "/journals",            icon: JournalIcon },
+      { label: "Journal Entries",    href: "/journal-entries",     icon: JEIcon },
+      { label: "Analytic Accounts",  href: "/analytic-accounts",   icon: AnalyticIcon },
     ],
   },
   {
-    label: 'Accounting',
+    group: "PURCHASE",
     items: [
-      { href: '/chart-of-accounts', label: 'Chart of Accounts', icon: '📒' },
-      { href: '/journals', label: 'Journals', icon: '📓' },
-      { href: '/journal-entries', label: 'Journal Entries', icon: '📝' },
-      { href: '/analytic-accounts', label: 'Analytic Accounts', icon: '📈' },
+      { label: "Purchase Orders", href: "/purchase-orders", icon: POIcon },
+      { label: "Vendor Bills",    href: "/vendor-bills",    icon: BillIcon },
     ],
   },
   {
-    label: 'Purchase',
+    group: "SALES",
     items: [
-      { href: '/purchase-orders', label: 'Purchase Orders', icon: '🛒' },
-      { href: '/vendor-bills', label: 'Vendor Bills', icon: '🧾' },
+      { label: "Sales Orders",      href: "/sales-orders",      icon: SOIcon },
+      { label: "Customer Invoices", href: "/customer-invoices", icon: InvIcon },
     ],
   },
   {
-    label: 'Sales',
+    group: "FINANCE",
     items: [
-      { href: '/sales-orders', label: 'Sales Orders', icon: '🛍️' },
-      { href: '/customer-invoices', label: 'Customer Invoices', icon: '📄' },
+      { label: "Payments", href: "/payments", icon: PayIcon },
+      { label: "Budgets",  href: "/budgets",  icon: BudgetIcon },
     ],
   },
   {
-    label: 'Finance',
+    group: "REPORTS",
     items: [
-      { href: '/payments', label: 'Payments', icon: '💳' },
-      { href: '/budgets', label: 'Budgets', icon: '🏦' },
-    ],
-  },
-  {
-    label: 'Reports',
-    items: [
-      { href: '/reports/profit-loss', label: 'Profit & Loss', icon: '📉' },
-      { href: '/reports/balance-sheet', label: 'Balance Sheet', icon: '⚖️' },
-      { href: '/reports/budget-report', label: 'Budget Report', icon: '📋' },
+      { label: "Profit & Loss",  href: "/reports/profit-loss",    icon: ReportIcon },
+      { label: "Balance Sheet",  href: "/reports/balance-sheet",  icon: ReportIcon },
+      { label: "Budget Report",  href: "/reports/budget-report",  icon: ReportIcon },
     ],
   },
 ];
 
-interface SidebarProps {
-  open: boolean;
-  onClose: () => void;
+// SECTION 2: SVG ICONS
+
+function DashIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".9"/>
+      <rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".5"/>
+      <rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".5"/>
+      <rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".9"/>
+    </svg>
+  );
+}
+function ContactIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="5" r="3" fill="currentColor" opacity=".8"/>
+      <path d="M2 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor"
+        strokeWidth="1.5" strokeLinecap="round" fill="none" opacity=".7"/>
+    </svg>
+  );
+}
+function ProductIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="2" y="8" width="12" height="6" rx="1.5" fill="currentColor" opacity=".5"/>
+      <rect x="4" y="2" width="8" height="7" rx="1.5" fill="currentColor" opacity=".9"/>
+    </svg>
+  );
+}
+function UserIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+      <path d="M2 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor"
+        strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+function CoAIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="2" y="2"  width="12" height="2" rx="1" fill="currentColor" opacity=".9"/>
+      <rect x="2" y="7"  width="8"  height="2" rx="1" fill="currentColor" opacity=".6"/>
+      <rect x="2" y="12" width="10" height="2" rx="1" fill="currentColor" opacity=".4"/>
+    </svg>
+  );
+}
+function JournalIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="3" y="1" width="10" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+      <path d="M6 5h4M6 8h4M6 11h2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function JEIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function AnalyticIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M2 12L6 7l3 3 5-6" stroke="currentColor" strokeWidth="1.5"
+        strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </svg>
+  );
+}
+function POIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+      <path d="M5 8h6M8 5v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function BillIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="3" y="1" width="10" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+      <path d="M6 5h4M6 8h2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M8 11.5l1.5-1.5-1.5-1.5" stroke="currentColor" strokeWidth="1.2"
+        strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+function SOIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M3 3h10l-1.5 7H4.5L3 3z" stroke="currentColor" strokeWidth="1.5"
+        fill="none" strokeLinejoin="round"/>
+      <circle cx="6"  cy="13" r="1" fill="currentColor"/>
+      <circle cx="11" cy="13" r="1" fill="currentColor"/>
+    </svg>
+  );
+}
+function InvIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="3" y="1" width="10" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+      <path d="M6 6h4M6 9h4M6 12h2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function PayIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="1" y="4" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+      <path d="M1 7h14" stroke="currentColor" strokeWidth="1.5"/>
+      <rect x="3" y="9.5" width="3" height="1.5" rx=".5" fill="currentColor" opacity=".6"/>
+    </svg>
+  );
+}
+function BudgetIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+      <path d="M8 4v4l3 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function ReportIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="2"   y="10" width="3" height="4" rx="1" fill="currentColor" opacity=".5"/>
+      <rect x="6.5" y="6"  width="3" height="8" rx="1" fill="currentColor" opacity=".7"/>
+      <rect x="11"  y="2"  width="3" height="12" rx="1" fill="currentColor" opacity=".9"/>
+    </svg>
+  );
 }
 
-export default function Sidebar({ open, onClose }: SidebarProps) {
+// SECTION 3: SIDEBAR COMPONENT
+
+export default function Sidebar() {
   const pathname = usePathname();
 
+  // API: const { user } = useAuth();
+  // API: When backend ready, replace all "Admin User" / "Administrator" / "A"
+
   return (
-    <>
-      {/* Mobile overlay */}
-      {open && (
-        <div
-          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
-          onClick={onClose}
-        />
-      )}
 
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          'fixed inset-y-0 left-0 z-40 w-64 bg-gray-900 text-white flex flex-col transition-transform duration-300',
-          'lg:relative lg:translate-x-0',
-          open ? 'translate-x-0' : '-translate-x-full'
-        )}
-      >
-        {/* Logo */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-700">
-          <span className="text-2xl">🪑</span>
-          <span className="text-lg font-bold tracking-tight">Urban Furniture</span>
+    <aside className="w-56 min-h-screen bg-[#E2DDD3] flex flex-col fixed left-0 top-0 bottom-0 z-50">
+
+      {}
+      {}
+      <div className="flex items-center gap-2.5 px-5 py-5 border-b border-[#D0CABF]">
+        {}
+        <div className="w-7 h-7 bg-[#6B705C] rounded-lg flex items-center justify-center flex-shrink-0">
+          <span className="text-white text-xs font-bold">UF</span>
         </div>
+        <span className="text-[#2C2C2C] font-semibold text-sm tracking-wide">
+          Urban Furniture
+        </span>
+      </div>
 
-        {/* Nav */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
-          {navGroups.map((group) => (
-            <div key={group.label}>
-              <p className="px-3 mb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">
-                {group.label}
-              </p>
-              <ul className="space-y-0.5">
-                {group.items.map((item) => {
-                  const active = pathname === item.href || pathname.startsWith(item.href + '/');
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={onClose}
-                        className={cn(
-                          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                          active
-                            ? 'bg-indigo-600 text-white'
-                            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                        )}
-                      >
-                        <span className="text-base">{item.icon}</span>
-                        {item.label}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
+      {}
+      {}
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 scrollbar-hide">
+        {NAV.map((section) => (
+          <div key={section.group}>
+
+            {}
+            {}
+            <p className="text-[10px] font-semibold tracking-widest text-[#A5A58D] px-2 mb-1.5">
+              {section.group}
+            </p>
+
+            {}
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+
+                // Dashboard uses an exact match; other routes support nested pages.
+                const active =
+                  pathname === item.href ||
+                  (item.href !== "/dashboard" && pathname.startsWith(item.href));
+
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-colors ${
+                      active
+                        ? "bg-[#6B705C] text-white font-medium"
+                        : "text-[#737373] hover:text-[#2C2C2C] hover:bg-[#CEC9BE]"
+                    }`}
+                  >
+                    {}
+                    <span className={active ? "text-white" : "text-[#A5A58D]"}>
+                      <item.icon />
+                    </span>
+                    {item.label}
+                  </a>
+                );
+              })}
             </div>
-          ))}
-        </nav>
-      </aside>
-    </>
+          </div>
+        ))}
+      </nav>
+
+      {}
+      {}
+      <div className="border-t border-[#D0CABF] px-4 py-4">
+        <div className="flex items-center gap-3">
+
+          {}
+          <div className="w-8 h-8 rounded-full bg-[#6B705C] flex items-center justify-center flex-shrink-0">
+            <span className="text-white text-xs font-semibold">
+              A {}
+            </span>
+          </div>
+
+          {}
+          <div className="flex-1 min-w-0">
+            <p className="text-[#2C2C2C] text-xs font-medium truncate">
+              Admin User {}
+            </p>
+            <p className="text-[#737373] text-[10px] truncate">
+              Administrator {}
+            </p>
+          </div>
+
+          {}
+          <button className="text-[#A5A58D] hover:text-[#2C2C2C] transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 5l4 4 4-4" stroke="currentColor"
+                strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
   );
 }

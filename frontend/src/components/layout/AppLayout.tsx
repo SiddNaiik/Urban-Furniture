@@ -5,14 +5,17 @@ import Topbar from './Topbar';
 import { useState } from 'react';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Topbar onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+    <div className="flex min-h-screen bg-[#F8F6F1]">
+      {/* Spacer — reserves the 224px (w-56) the fixed Sidebar occupies */}
+      <div className="w-56 shrink-0" aria-hidden="true" />
+ 
+      {/* The actual fixed sidebar, rendered on top of the spacer above */}
+      <Sidebar />
+ 
+      {/* Real page content — flex-1 takes all remaining width */}
+      <div className="flex-1 min-w-0 flex flex-col">
+        {children}
       </div>
     </div>
   );
