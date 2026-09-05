@@ -63,9 +63,8 @@ export default function SignupPage() {
   };
   return (
     <div className="w-full">
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
+      {/* 
+          HEADER*/}
       <div className="mb-7">
         <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#2C2C2C]">
           Sign Up your account
@@ -75,9 +74,8 @@ export default function SignupPage() {
           Set up your Urban Furniture accounting account and get started.
         </p>
       </div>
-      {/* =====================================================
-          LOGIN / Sign Up TABS
-      ===================================================== */}
+      {/* 
+          LOGIN / Sign Up TABS*/}
       <div className="mb-6 grid grid-cols-2 rounded-xl border border-[#E3E0D8] bg-white p-1">
         <Link
           href="/login"
@@ -89,9 +87,8 @@ export default function SignupPage() {
           Sign Up
         </div>
       </div>
-      {/* =====================================================
-          FORM
-      ===================================================== */}
+      {/* 
+          FORM*/}
       <form
         onSubmit={handleSubmit}
         className="space-y-4"
@@ -220,9 +217,9 @@ export default function SignupPage() {
             </button>
           </div>
         </div>
-        {/* =====================================================
+        {/* 
             FORGOT PASSWORD
-        ===================================================== */}
+         */}
         <div className="flex justify-end pt-1">
           <Link
             href="/forgot-password"
@@ -237,9 +234,9 @@ export default function SignupPage() {
             {error}
           </div>
         )}
-        {/* =====================================================
+        {/* 
             BUTTONS
-        ===================================================== */}
+         */}
         <div className="grid grid-cols-2 gap-3 pt-2">
           {/* Sign Up */}
           <button
@@ -257,9 +254,8 @@ export default function SignupPage() {
           </Link>
         </div>
       </form>
-      {/* =====================================================
-          BOTTOM LOGIN LINK
-      ===================================================== */}
+      {/* 
+          BOTTOM LOGIN LINK*/}
       <p className="mt-7 text-center text-sm text-[#737373]">
         Already have an account?{' '}
         <Link
@@ -272,9 +268,9 @@ export default function SignupPage() {
     </div>
   );
 }
-/* =========================================================
+/* ====
    EYE ICON
-========================================================= */
+==== */
 function EyeIcon() {
   return (
     <svg

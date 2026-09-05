@@ -11,9 +11,9 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  /* =====================================================
+  /* 
      LOGIN
-  ===================================================== */
+   */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -46,9 +46,9 @@ export default function LoginPage() {
   };
   return (
     <div className="w-full">
-      {/* =====================================================
+      {/* 
           HEADER
-      ===================================================== */}
+       */}
       <div className="mb-8">
         <div className="flex items-center gap-2">
           <h1 className="text-4xl font-bold tracking-[-0.035em] text-[#2C2C2C]">
@@ -59,9 +59,9 @@ export default function LoginPage() {
           Sign in to your Urban Furniture account
         </p>
       </div>
-      {/* =====================================================
+      {/* 
           LOGIN / CREATE USER SWITCH
-      ===================================================== */}
+       */}
       <div className="rounded-2xl border border-[#E5E1D9] bg-white p-1.5 shadow-[0_12px_40px_rgba(44,44,44,0.05)]">
         <div className="grid grid-cols-2 gap-1 rounded-xl bg-[#F8F6F1] p-1">
           {/* Login */}
@@ -80,9 +80,9 @@ export default function LoginPage() {
           </Link>
         </div>
       </div>
-      {/* =====================================================
+      {/* 
           LOGIN FORM
-      ===================================================== */}
+       */}
       <form
         onSubmit={handleSubmit}
         className="mt-8 space-y-6"
@@ -216,9 +216,9 @@ export default function LoginPage() {
           Log In
         </button>
       </form>
-      {/* =====================================================
+      {/* 
           CREATE USER
-      ===================================================== */}
+       */}
       <div className="mt-8 border-t border-[#E7E3DB] pt-7">
         <p className="text-center text-base text-[#737373]">
           Don&apos;t have an account?{" "}
@@ -236,9 +236,9 @@ export default function LoginPage() {
     </div>
   );
 }
-/* =========================================================
+/* ====
    EMAIL ICON
-========================================================= */
+==== */
 function EmailIcon() {
   return (
     <svg
@@ -265,9 +265,9 @@ function EmailIcon() {
     </svg>
   );
 }
-/* =========================================================
+/* ====
    LOCK ICON
-========================================================= */
+==== */
 function LockIcon() {
   return (
     <svg
@@ -293,9 +293,9 @@ function LockIcon() {
     </svg>
   );
 }
-/* =========================================================
+/* ====
    EYE ICON
-========================================================= */
+==== */
 function EyeIcon() {
   return (
     <svg
@@ -318,9 +318,9 @@ function EyeIcon() {
     </svg>
   );
 }
-/* =========================================================
+/* ====
    EYE OFF ICON
-========================================================= */
+==== */
 function EyeOffIcon() {
   return (
     <svg
