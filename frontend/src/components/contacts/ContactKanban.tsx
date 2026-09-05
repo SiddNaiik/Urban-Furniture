@@ -1,37 +1,33 @@
 'use client';
 
+import Card from '@/components/ui/Card';
+import Badge from '@/components/ui/Badge';
 import type { Contact } from '@/types/contact';
-import { useRouter } from 'next/navigation';
 
-interface ContactKanbanProps {
-  contacts: Contact[];
-}
-
-export default function ContactKanban({ contacts }: ContactKanbanProps) {
-  const router = useRouter();
-
-  const groups = {
-    customer: contacts.filter((c) => c.type === 'customer'),
-    vendor: contacts.filter((c) => c.type === 'vendor'),
-    both: contacts.filter((c) => c.type === 'both'),
-  };
-
+export default function ContactKanban({ contacts }: { contacts: Contact[] }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {Object.entries(groups).map(([key, items]) => (
-        <div key={key} className="bg-gray-100 rounded-xl p-4 space-y-3">
-          <h3 className="text-xs font-semibold Uppercase text-gray-500 tracking-wider capitalize">{key}</h3>
-          {items.map((c) => (
-            <div
-              key={c.id}
-              onClick={() => router.push(`/contacts/${c.id}`)}
-              className="bg-white rounded-lg p-3 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
-            >
-              <p className="font-medium text-sm text-gray-900">{c.name}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{c.email}</p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {contacts.map((c) => (
+        <Card key={c.id} className="hover:border-[#6B705C] transition-all cursor-pointer shadow-2xs">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#6B705C]/10 text-[#6B705C] font-semibold flex items-center justify-center font-display text-sm">
+                {c.name.substring(0, 2).toUpperCase()}
+              </div>
+              <div>
+                <h4 className="font-semibold text-[#2C2C2C] text-sm">{c.name}</h4>
+                <p className="text-xs text-[#737373]">{c.email || 'No email'}</p>
+              </div>
             </div>
-          ))}
-        </div>
+            <Badge variant={c.type === 'customer' ? 'confirmed' : c.type === 'vendor' ? 'warning' : 'default'}>
+              {c.type}
+            </Badge>
+          </div>
+          <div className="mt-4 pt-3 border-t border-[#E5E3DC] flex items-center justify-between text-xs text-[#737373]">
+            <span className="font-mono">{c.phone || 'No phone'}</span>
+            <span className="text-[#6B705C] font-medium hover:underline">Details →</span>
+          </div>
+        </Card>
       ))}
     </div>
   );
