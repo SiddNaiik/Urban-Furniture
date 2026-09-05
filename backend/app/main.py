@@ -1,8 +1,14 @@
 from fastapi import FastAPI
-from app.db import db_ping
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Urban-Furniture API")
+from app.db import db_ping
+from app.routers import auth, users
+
+app = FastAPI(
+    title="Urban-Furniture Accounting System API",
+    description="Authentication and User Management Backend for Urban-Furniture Accounting System",
+    version="1.0.0",
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,9 +18,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
+app.include_router(users.router)
+
+
 @app.get("/")
 def root():
     return {"message": "Backend is running"}
+
 
 @app.get("/health")
 def health():
