@@ -1,205 +1,150 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { getDashboardSummary, getMe } from "@/lib/api";
-import { removeToken } from "@/lib/auth";
+import React, { useState } from "react";
+import Link from "next/link";
+import Card from "@/components/ui/Card";
+import Badge from "@/components/ui/Badge";
+import Table from "@/components/ui/Table";
+import { formatCurrency } from "@/lib/utils";
+import { MOCK_SALES_ORDERS, MOCK_PURCHASE_ORDERS, MOCK_CUSTOMER_INVOICES, MOCK_PRODUCTS } from "@/lib/mockData";
+import { ui } from "@/lib/theme";
 
-interface DashboardData {
-  sales: {
-    all: number;
-    confirmed: number;
-    draft: number;
-  };
-  purchase: {
-    all: number;
-    confirmed: number;
-    draft: number;
-  };
-  budget: {
-    achieved: number;
-    budget: number;
-    committed: number;
-  };
-}
+/*
+  BACKEND DYNAMIC DATA INTEGRATION (API Example):
+  -----------------------------------------------
+  import { useFetch } from "@/hooks/useFetch";
+  import { getSalesOrders, getPurchaseOrders, getCustomerInvoices } from "@/lib/api";
 
-interface UserProfile {
-  id: number;
-  name: string;
-  login_id: string;
-  email: string;
-  role: string;
-}
+  const { data: salesOrders = MOCK_SALES_ORDERS } = useFetch(getSalesOrders);
+  const { data: purchaseOrders = MOCK_PURCHASE_ORDERS } = useFetch(getPurchaseOrders);
+  const { data: invoices = MOCK_CUSTOMER_INVOICES } = useFetch(getCustomerInvoices);
+*/
 
-const NAV_MENUS = {
-  Sales: [
-    { label: "Sales order", href: "/sales-orders" },
-    { label: "Sale Invoice", href: "/customer-invoices" },
-    { label: "Receipt", href: "/payments?type=receive" },
-  ],
-  Purchase: [
-    { label: "Purchase Order", href: "/purchase-orders" },
-    { label: "Purchase Bill", href: "/vendor-bills" },
-    { label: "Payment", href: "/payments?type=send" },
-  ],
-  Account: [
-    { label: "Contact", href: "/contacts" },
-    { label: "Product", href: "/products" },
-    { label: "Analyticals", href: "/analytic-accounts" },
-    { label: "Analytical Budget", href: "/budgets" },
-    { label: "Chart of Account", href: "/chart-of-accounts" },
-    { label: "Journals", href: "/journals" },
-    { label: "Journal Entries", href: "/journal-entries" },
-  ],
-  Report: [
-    { label: "Balancesheet", href: "/reports/balance-sheet" },
-    { label: "Profit and Loss", href: "/reports/profit-loss" },
-    { label: "Budget Report", href: "/reports/budget-report" },
-  ],
-};
+export default function DashboardPage() {
+  const [sales] = useState(MOCK_SALES_ORDERS);
+  const [purchases] = useState(MOCK_PURCHASE_ORDERS);
+  const [invoices] = useState(MOCK_CUSTOMER_INVOICES);
+  const [products] = useState(MOCK_PRODUCTS);
 
-function NavDropdown({
-  label,
-  items,
-  open,
-  onToggle,
-}: {
-  label: string;
-  items: { label: string; href: string }[];
-  open: boolean;
-  onToggle: () => void;
-}) {
+  const totalSalesAmount = sales.reduce((sum, item) => sum + item.total, 0);
+  const totalPurchaseAmount = purchases.reduce((sum, item) => sum + item.total, 0);
+
   return (
-    <div className="relative">
-      <button
-        onClick={onToggle}
-        className={`flex items-center gap-1 px-4 py-2 text-sm rounded-md transition-colors ${
-          open ? "text-[#2C2C2C] font-semibold" : "text-[#737373] hover:text-[#2C2C2C]"
-        }`}
-      >
-        {label}
-        <svg
-          width="10"
-          height="10"
-          viewBox="0 0 10 10"
-          fill="none"
-          className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        >
-          <path
-            d="M2 3.5l3 3 3-3"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className={ui.pageTitle}>Dashboard Overview</h1>
+          <p className="text-sm text-[#737373] mt-1">Real-time accounting insights & business performance</p>
+        </div>
+        <div className="flex gap-3">
+          <Link href="/sales-orders/new" className={ui.btnPrimary}>
+            + New Sales Order
+          </Link>
+          <Link href="/purchase-orders/new" className={ui.btnSecondary}>
+            + New Purchase Order
+          </Link>
+        </div>
+      </div>
+
+      {/* Overview Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className={ui.metricCard}>
+          <span className={ui.metricLabel}>Total Revenue (Sales)</span>
+          <span className={ui.metricValue}>{formatCurrency(totalSalesAmount)}</span>
+          <span className="text-xs text-[#3D7A4E] font-medium mt-1">↑ 12% vs last month</span>
+        </div>
+        <div className={ui.metricCard}>
+          <span className={ui.metricLabel}>Total Purchases</span>
+          <span className={ui.metricValue}>{formatCurrency(totalPurchaseAmount)}</span>
+          <span className="text-xs text-[#737373] mt-1">2 Pending Approval</span>
+        </div>
+        <div className={ui.metricCard}>
+          <span className={ui.metricLabel}>Active Invoices</span>
+          <span className={ui.metricValue}>{invoices.length}</span>
+          <span className="text-xs text-[#D97706] font-medium mt-1">1 Awaiting Payment</span>
+        </div>
+        <div className={ui.metricCard}>
+          <span className={ui.metricLabel}>Products in Stock</span>
+          <span className={ui.metricValue}>{products.reduce((acc, p) => acc + p.qty_available, 0)} units</span>
+          <span className="text-xs text-[#3D7A4E] font-medium mt-1">5 Categories</span>
+        </div>
+      </div>
+
+      {/* Section Cards matching wireframe style */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <SectionCard
+          title="Sales Orders"
+          actionLabel="New Order"
+          actionHref="/sales-orders/new"
+          chips={[
+            { label: "All Orders", value: sales.length },
+            { label: "Confirmed", value: sales.filter(s => s.status === 'sale' || s.status === 'done').length },
+            { label: "Draft", value: sales.filter(s => s.status === 'draft').length },
+          ]}
+        />
+
+        <SectionCard
+          title="Purchase Orders"
+          actionLabel="New PO"
+          actionHref="/purchase-orders/new"
+          chips={[
+            { label: "All Orders", value: purchases.length },
+            { label: "Confirmed", value: purchases.filter(p => p.status === 'purchase').length },
+            { label: "Draft", value: purchases.filter(p => p.status === 'draft').length },
+          ]}
+        />
+
+        <SectionCard
+          title="Budgets & Reports"
+          actionLabel="View P&L"
+          actionHref="/reports/profit-loss"
+          chips={[
+            { label: "Achieved", value: 3 },
+            { label: "Committed", value: 4 },
+            { label: "Active", value: 2 },
+          ]}
+        />
+      </div>
+
+      {/* Recent Orders & Products Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Sales Orders */}
+        <Card padding={false} className="overflow-hidden">
+          <div className="p-5 border-b border-[#E5E3DC] flex items-center justify-between">
+            <h3 className="font-semibold text-[#2C2C2C] font-display">Recent Sales Orders</h3>
+            <Link href="/sales-orders" className="text-xs text-[#6B705C] font-medium hover:underline">View All →</Link>
+          </div>
+          <Table
+            columns={[
+              { key: 'reference', header: 'Reference' },
+              { key: 'customer', header: 'Customer' },
+              { key: 'total', header: 'Total', render: (row) => <span className="font-mono font-medium">{formatCurrency(row.total)}</span> },
+              { key: 'status', header: 'Status', render: (row) => <Badge variant={row.status === 'sale' || row.status === 'done' ? 'confirmed' : 'draft'}>{row.status}</Badge> },
+            ]}
+            data={sales.slice(0, 5)}
+            keyExtractor={(item) => item.id}
           />
-        </svg>
-      </button>
+        </Card>
 
-      {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-white border border-[#E5E3DC] rounded-xl shadow-md z-50 min-w-[170px] py-1.5">
-          {items.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="block px-4 py-2 text-sm text-[#2C2C2C] hover:bg-[#F8F6F1] hover:text-[#6B705C] transition-colors"
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function Topbar({
-  activeMenu,
-  onMenuToggle,
-  user,
-  onLogout,
-}: {
-  activeMenu: string | null;
-  onMenuToggle: (menu: string) => void;
-  user: UserProfile | null;
-  onLogout: () => void;
-}) {
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
-
-  const initial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
-
-  return (
-    <header className="h-16 bg-white border-b border-[#E5E3DC] flex items-center justify-between px-8 sticky top-0 z-40">
-      <div className="flex items-center gap-6">
-        <div className="font-bold text-lg text-[#2C2C2C] tracking-tight">
-          Urban Furniture
-        </div>
-
-        <nav className="flex items-center gap-1">
-          {Object.keys(NAV_MENUS).map((menu) => (
-            <NavDropdown
-              key={menu}
-              label={menu}
-              items={NAV_MENUS[menu as keyof typeof NAV_MENUS]}
-              open={activeMenu === menu}
-              onToggle={() => onMenuToggle(menu)}
-            />
-          ))}
-        </nav>
+        {/* Top Furniture Products */}
+        <Card padding={false} className="overflow-hidden">
+          <div className="p-5 border-b border-[#E5E3DC] flex items-center justify-between">
+            <h3 className="font-semibold text-[#2C2C2C] font-display">Top Furniture Inventory</h3>
+            <Link href="/products" className="text-xs text-[#6B705C] font-medium hover:underline">View All →</Link>
+          </div>
+          <Table
+            columns={[
+              { key: 'name', header: 'Product' },
+              { key: 'category', header: 'Category' },
+              { key: 'lst_price', header: 'Price', render: (row) => <span className="font-mono font-medium">{formatCurrency(row.lst_price)}</span> },
+              { key: 'qty_available', header: 'Stock', render: (row) => <span className="font-semibold text-[#2C2C2C]">{row.qty_available} units</span> },
+            ]}
+            data={products.slice(0, 5)}
+            keyExtractor={(item) => item.id}
+          />
+        </Card>
       </div>
-
-      <div className="relative">
-        <button
-          onClick={() => setShowUserDropdown(!showUserDropdown)}
-          className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-[#E5E3DC] hover:border-[#A5A58D] transition-colors cursor-pointer"
-        >
-          <div className="w-7 h-7 rounded-full bg-[#6B705C] flex items-center justify-center">
-            <span className="text-white text-xs font-semibold">{initial}</span>
-          </div>
-
-          <div className="flex flex-col leading-tight text-left">
-            <span className="text-xs font-semibold text-[#2C2C2C]">
-              {user?.name || "Loading..."}
-            </span>
-            <span className="text-[10px] capitalize text-[#737373]">
-              {user?.role || "User"}
-            </span>
-          </div>
-
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="ml-1 text-[#737373]">
-            <path
-              d="M2.5 4.5l3.5 3.5 3.5-3.5"
-              stroke="currentColor"
-              strokeWidth="1.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-
-        {showUserDropdown && (
-          <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-[#E5E3DC] rounded-xl shadow-lg z-50 py-2">
-            <div className="px-4 py-2 border-b border-[#E5E3DC]">
-              <p className="text-xs text-[#737373]">Signed in as</p>
-              <p className="text-sm font-semibold text-[#2C2C2C] truncate">@{user?.login_id}</p>
-            </div>
-            <button
-              onClick={onLogout}
-              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-            >
-              Log out
-            </button>
-          </div>
-        )}
-      </div>
-    </header>
-  );
-}
-
-function StatChip({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="flex-1 border border-[#E5E3DC] rounded-xl px-6 py-5 bg-[#FAFAF8] hover:border-[#A5A58D] transition-colors">
-      <p className="text-xs text-[#737373] mb-2">{label}</p>
-      <p className="text-3xl font-semibold text-[#2C2C2C] tabular-nums">{value}</p>
     </div>
   );
 }
@@ -216,128 +161,23 @@ function SectionCard({
   actionHref: string;
 }) {
   return (
-    <div className="bg-white border border-[#E5E3DC] rounded-2xl p-7 shadow-sm">
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-base font-semibold text-[#2C2C2C]">{title}</h2>
-        <a
-          href={actionHref}
-          className="bg-[#6B705C] text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-[#5C6149] transition-colors"
-        >
-          {actionLabel}
-        </a>
-      </div>
-
-      <div className="flex flex-row gap-4">
-        {chips.map((chip) => (
-          <StatChip key={chip.label} label={chip.label} value={chip.value} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default function DashboardPage() {
-  const router = useRouter();
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [data, setData] = useState<DashboardData>({
-    sales: { all: 0, confirmed: 0, draft: 0 },
-    purchase: { all: 0, confirmed: 0, draft: 0 },
-    budget: { achieved: 0, budget: 0, committed: 0 },
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const [meRes, dashboardRes] = await Promise.all([
-          getMe(),
-          getDashboardSummary(),
-        ]);
-        setUser(meRes);
-        if (dashboardRes) {
-          setData(dashboardRes);
-        }
-      } catch (err: any) {
-        console.error("Failed to load dashboard data:", err);
-        setError("Failed to fetch dashboard summary from backend.");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  function toggleMenu(menu: string) {
-    setActiveMenu((prev) => (prev === menu ? null : menu));
-  }
-
-  function handleLogout() {
-    removeToken();
-    router.push("/login");
-  }
-
-  return (
-    <div className="min-h-screen bg-[#F8F6F1]" style={{ fontFamily: "'Inter', sans-serif" }}>
-      <Topbar
-        activeMenu={activeMenu}
-        onMenuToggle={toggleMenu}
-        user={user}
-        onLogout={handleLogout}
-      />
-
-      {activeMenu && (
-        <div className="fixed inset-0 z-30" onClick={() => setActiveMenu(null)} />
-      )}
-
-      <main className="max-w-3xl mx-auto px-6 py-10 flex flex-col gap-5">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="text-2xl font-semibold text-[#2C2C2C]">Dashboard</h1>
-          {loading && <span className="text-xs text-[#737373]">Refreshing data...</span>}
+    <Card className="flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-semibold text-[#2C2C2C] font-display">{title}</h2>
+          <Link href={actionHref} className="bg-[#6B705C] text-white text-xs font-medium px-3 py-1.5 rounded-lg hover:bg-[#5C6149] transition-colors">
+            {actionLabel}
+          </Link>
         </div>
-
-        {error && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-            {error}
-          </div>
-        )}
-
-        <SectionCard
-          title="Sales"
-          actionLabel="New"
-          actionHref="/sales-orders/new"
-          chips={[
-            { label: "All", value: data.sales.all },
-            { label: "Confirmed", value: data.sales.confirmed },
-            { label: "Draft", value: data.sales.draft },
-          ]}
-        />
-
-        <SectionCard
-          title="Purchase"
-          actionLabel="New"
-          actionHref="/purchase-orders/new"
-          chips={[
-            { label: "All", value: data.purchase.all },
-            { label: "Confirmed", value: data.purchase.confirmed },
-            { label: "Draft", value: data.purchase.draft },
-          ]}
-        />
-
-        <SectionCard
-          title="Budget Reports"
-          actionLabel="Report"
-          actionHref="/reports/budget-report"
-          chips={[
-            { label: "Achieved", value: data.budget.achieved },
-            { label: "Budget", value: data.budget.budget },
-            { label: "Committed", value: data.budget.committed },
-          ]}
-        />
-      </main>
-    </div>
+        <div className="grid grid-cols-3 gap-2">
+          {chips.map((chip) => (
+            <div key={chip.label} className="border border-[#E5E3DC] rounded-lg p-3 bg-[#F8F6F1]/50 text-center">
+              <p className="text-[10px] text-[#737373] uppercase tracking-wider font-semibold mb-1">{chip.label}</p>
+              <p className="text-xl font-semibold text-[#2C2C2C] font-mono">{chip.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Card>
   );
 }

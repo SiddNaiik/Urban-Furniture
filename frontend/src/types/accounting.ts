@@ -21,6 +21,7 @@ export interface Journal {
 export interface JournalEntryLine {
   id?: string;
   account_id: string;
+  account_name?: string;
   partner_id?: string;
   name?: string;
   debit: number;
@@ -30,10 +31,13 @@ export interface JournalEntryLine {
 
 export interface JournalEntry {
   id: string;
+  name?: string;
   date: string;
+  ref?: string;
   reference?: string;
   journal?: string;
   journal_id?: string;
+  journal_name?: string;
   total_debit: number;
   total_credit: number;
   state: 'draft' | 'posted' | 'cancel' | string;
