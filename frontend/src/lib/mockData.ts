@@ -174,3 +174,4 @@ export const MOCK_USERS = [
   { id: 'u-2', name: 'Sarah Accountant', email: 'sarah@urbanfurniture.com', role: 'Accountant' },
   { id: 'u-3', name: 'David Sales', email: 'david@urbanfurniture.com', role: 'Sales Manager' },
 ];
+

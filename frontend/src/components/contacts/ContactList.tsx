@@ -22,15 +22,71 @@ export default function ContactList() {
     (c.email && c.email.toLowerCase().includes(search.toLowerCase()))
   );
 
+  /**
+   * columns — defines the table columns for List view.
+   *
+   * CHANGE: Added "Photo" column between Name and Email (as requested).
+   * Photo column renders a circular avatar:
+   *   - If contact.imageUrl exists → shows <img> tag with the photo
+   *   - If no imageUrl → shows initials fallback (first 2 letters, olive bg)
+   *
+   * Column order: Photo | Name | Email | Phone | Type
+   */
   const columns = [
-    { key: 'name', header: 'Name', render: (c: Contact) => <span className="font-medium text-[#2C2C2C]">{c.name}</span> },
-    { key: 'email', header: 'Email', render: (c: Contact) => <span className="text-[#737373]">{c.email || '-'}</span> },
-    { key: 'phone', header: 'Phone', render: (c: Contact) => <span className="font-mono text-[#737373]">{c.phone || '-'}</span> },
+    // ── PHOTO COLUMN (new) ──────────────────────────────────
+    {
+      key: 'photo',
+      header: 'Photo',
+      render: (c: Contact) =>
+        c.imageUrl ? (
+          // Real photo — shown when contact has an uploaded image
+          <img
+            src={c.imageUrl}
+            alt={c.name}
+            className="w-8 h-8 rounded-full object-cover border border-[#E5E3DC]"
+          />
+        ) : (
+          // Initials fallback — shown when no image uploaded
+          <div className="w-8 h-8 rounded-full bg-[#6B705C]/10 text-[#6B705C] font-semibold flex items-center justify-center text-xs">
+            {c.name.substring(0, 2).toUpperCase()}
+          </div>
+        ),
+    },
+    // ── EXISTING COLUMNS (unchanged) ────────────────────────
+    {
+      key: 'name',
+      header: 'Name',
+      render: (c: Contact) => (
+        <span className="font-medium text-[#2C2C2C]">{c.name}</span>
+      ),
+    },
+    {
+      key: 'email',
+      header: 'Email',
+      render: (c: Contact) => (
+        <span className="text-[#737373]">{c.email || '-'}</span>
+      ),
+    },
+    {
+      key: 'phone',
+      header: 'Phone',
+      render: (c: Contact) => (
+        <span className="font-mono text-[#737373]">{c.phone || '-'}</span>
+      ),
+    },
     {
       key: 'type',
       header: 'Type',
       render: (c: Contact) => (
-        <Badge variant={c.type === 'customer' ? 'confirmed' : c.type === 'vendor' ? 'warning' : 'default'}>
+        <Badge
+          variant={
+            c.type === 'customer'
+              ? 'confirmed'
+              : c.type === 'vendor'
+              ? 'warning'
+              : 'default'
+          }
+        >
           {c.type}
         </Badge>
       ),
@@ -39,14 +95,23 @@ export default function ContactList() {
 
   return (
     <div className="space-y-6">
+      {/* Toolbar — unchanged */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-        <SearchBar value={search} onChange={setSearch} placeholder="Search contacts..." className="max-w-md flex-1" />
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder="Search contacts..."
+          className="max-w-md flex-1"
+        />
         <div className="flex items-center gap-3">
           <ViewToggle view={view} onChange={setView} />
-          <Button onClick={() => router.push('/contacts/new')}>+ New Contact</Button>
+          <Button onClick={() => router.push('/contacts/new')}>
+            + New Contact
+          </Button>
         </div>
       </div>
 
+      {/* Content area — list or kanban */}
       {view === 'list' ? (
         <Table
           columns={columns}
