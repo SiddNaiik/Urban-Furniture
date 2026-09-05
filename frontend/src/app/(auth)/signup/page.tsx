@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -7,13 +6,11 @@ import { signup } from "@/lib/api";
 
 export default function SignupPage() {
   const router = useRouter();
-
   const [name, setName] = useState("");
   const [loginId, setLoginId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -31,7 +28,6 @@ export default function SignupPage() {
     lowercase: /[a-z]/.test(password),
     special: /[^A-Za-z0-9]/.test(password),
   };
-
   const isPasswordValid =
     passwordRules.minLength &&
     passwordRules.uppercase &&
@@ -68,12 +64,10 @@ export default function SignupPage() {
       setError("Please enter your email address.");
       return;
     }
-
     if (!isPasswordValid) {
       setError("Please meet all password requirements.");
       return;
     }
-
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -105,7 +99,6 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
-
   return (
     <div className="w-full">
       {/* HEADER */}
