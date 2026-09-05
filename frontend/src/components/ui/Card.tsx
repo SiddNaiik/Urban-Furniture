@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { ui } from '@/lib/theme';
 
 interface CardProps {
   children: React.ReactNode;
@@ -8,7 +9,7 @@ interface CardProps {
 
 export default function Card({ children, className, padding = true }: CardProps) {
   return (
-    <div className={cn('bg-white rounded-xl border border-gray-200 shadow-sm', padding && 'p-6', className)}>
+    <div className={cn(ui.card, padding ? 'p-6' : 'p-0', className)}>
       {children}
     </div>
   );

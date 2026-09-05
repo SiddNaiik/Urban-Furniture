@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { ui } from '@/lib/theme';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
@@ -13,16 +14,15 @@ export default function Select({ label, error, options, placeholder, className, 
   return (
     <div className="space-y-1">
       {label && (
-        <label htmlFor={selectId} className="block text-sm font-medium text-gray-700">
+        <label htmlFor={selectId} className={ui.label}>
           {label}
         </label>
       )}
       <select
         id={selectId}
         className={cn(
-          'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm',
-          'focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500',
-          error && 'border-red-500',
+          ui.select,
+          error && 'border-[#C0392B]',
           className
         )}
         {...props}
@@ -34,7 +34,7 @@ export default function Select({ label, error, options, placeholder, className, 
           </option>
         ))}
       </select>
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-[#C0392B] mt-1">{error}</p>}
     </div>
   );
 }

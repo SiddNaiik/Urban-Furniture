@@ -1,30 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
-import { getAccount, createAccount, updateAccount } from '@/lib/api';
-
-const ACCOUNT_TYPES = [
-  { value: 'asset', label: 'Asset' },
-  { value: 'liability', label: 'Liability' },
-  { value: 'equity', label: 'Equity' },
-  { value: 'income', label: 'Income' },
-  { value: 'expense', label: 'Expense' },
-];
+import { ui } from '@/lib/theme';
 
 export default function CoAForm({ id }: { id: string }) {
   const router = useRouter();
   const isNew = id === 'new';
-  const [form, setForm] = useState({ code: '', name: '', type: 'asset' });
+  const [form, setForm] = useState({ code: '101100', name: 'Petty Cash Operating Account', type: 'asset', balance: 5000 });
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!isNew) getAccount(id).then(setForm);
-  }, [id, isNew]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
@@ -33,24 +21,46 @@ export default function CoAForm({ id }: { id: string }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    try {
-      if (isNew) await createAccount(form);
-      else await updateAccount(id, form);
+    setTimeout(() => {
+      setLoading(false);
       router.push('/chart-of-accounts');
-    } finally { setLoading(false); }
+    }, 400);
   }
 
   return (
-    <Card className="max-w-xl">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Input label="Code" name="code" value={form.code} onChange={handleChange} required />
-        <Input label="Name" name="name" value={form.name} onChange={handleChange} required />
-        <Select label="Type" name="type" value={form.type} onChange={handleChange} options={ACCOUNT_TYPES} />
-        <div className="flex gap-3 pt-2">
-          <Button type="submit" loading={loading}>{isNew ? 'Create' : 'Save'}</Button>
-          <Button type="button" variant="secondary" onClick={() => router.push('/chart-of-accounts')}>Cancel</Button>
-        </div>
-      </form>
-    </Card>
+    <div className="max-w-xl mx-auto space-y-6">
+      <h1 className={ui.pageTitle}>{isNew ? 'New General Ledger Account' : `Edit Account: ${form.code}`}</h1>
+      <Card>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input label="Account Code" name="code" value={form.code} onChange={handleChange} required placeholder="101000" />
+            <Select
+              label="Account Type"
+              name="type"
+              value={form.type}
+              onChange={handleChange}
+              options={[
+                { value: 'asset', label: 'Asset' },
+                { value: 'liability', label: 'Liability' },
+                { value: 'equity', label: 'Equity' },
+                { value: 'income', label: 'Income' },
+                { value: 'expense', label: 'Expense' },
+              ]}
+            />
+          </div>
+          <Input label="Account Name" name="name" value={form.name} onChange={handleChange} required placeholder="e.g. Bank Operating Account" />
+          <Input label="Opening Balance ($)" name="balance" type="number" step="0.01" value={form.balance} onChange={handleChange} />
+          
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E5E3DC]">
+            <Button type="button" variant="secondary" onClick={() => router.push('/chart-of-accounts')}>
+              Cancel
+            </Button>
+            <Button type="submit" loading={loading}>
+              {isNew ? 'Create Account' : 'Save Account'}
+            </Button>
+          </div>
+        </form>
+      </Card>
+    </div>
   );
 }

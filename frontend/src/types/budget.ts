@@ -10,8 +10,11 @@ export interface Budget {
   id: string;
   name: string;
   period: string;
+  date_from?: string;
+  date_to?: string;
   total_amount: number | string;
-  status: 'draft' | 'confirmed' | 'done' | 'cancel' | string;
+  status: 'draft' | 'confirm' | 'confirmed' | 'done' | 'cancel' | string;
+  state?: 'draft' | 'confirm' | 'confirmed' | 'done' | 'cancel' | string;
   lines?: BudgetLine[];
   created_at?: string;
 }

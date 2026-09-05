@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { ui } from '@/lib/theme';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -11,22 +12,20 @@ export default function Input({ label, error, className, id, ...props }: InputPr
   return (
     <div className="space-y-1">
       {label && (
-        <label htmlFor={inputId} className="block text-sm font-medium text-gray-700">
+        <label htmlFor={inputId} className={ui.label}>
           {label}
         </label>
       )}
       <input
         id={inputId}
         className={cn(
-          'block w-full rounded-lg border px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:outline-none focus:ring-1',
-          error
-            ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-            : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500',
+          ui.input,
+          error && 'border-[#C0392B] focus:ring-[#C0392B]/30 focus:border-[#C0392B]',
           className
         )}
         {...props}
       />
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-[#C0392B] mt-1">{error}</p>}
     </div>
   );
 }

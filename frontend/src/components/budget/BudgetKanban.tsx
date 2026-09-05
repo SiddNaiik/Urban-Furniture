@@ -1,30 +1,23 @@
 'use client';
 
-import type { Budget } from '@/types/budget';
-import { useRouter } from 'next/navigation';
+import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import { formatDate } from '@/lib/utils';
+import type { Budget } from '@/types/budget';
 
-interface BudgetKanbanProps {
-  budgets: Budget[];
-}
-
-export default function BudgetKanban({ budgets }: BudgetKanbanProps) {
-  const router = useRouter();
+export default function BudgetKanban({ budgets }: { budgets: Budget[] }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {budgets.map((b) => (
-        <div
-          key={b.id}
-          onClick={() => router.push(`/budgets/${b.id}`)}
-          className="bg-white rounded-xl border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-shadow"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <p className="font-semibold text-gray-900">{b.name}</p>
-            <Badge variant={b.status === 'confirmed' ? 'success' : 'warning'}>{b.status}</Badge>
+        <Card key={b.id} className="hover:border-[#6B705C] transition-all cursor-pointer shadow-2xs">
+          <div className="flex items-start justify-between">
+            <h4 className="font-semibold text-[#2C2C2C] text-base font-display">{b.name}</h4>
+            <Badge variant={b.state === 'done' ? 'confirmed' : 'draft'}>{b.state}</Badge>
           </div>
-          <p className="text-xs text-gray-400">{b.period}</p>
-          <p className="text-sm font-medium text-indigo-600 mt-2">${b.total_amount}</p>
-        </div>
+          <div className="mt-4 pt-3 border-t border-[#E5E3DC] text-xs text-[#737373]">
+            <span>Period: {formatDate(b.date_from)} - {formatDate(b.date_to)}</span>
+          </div>
+        </Card>
       ))}
     </div>
   );
