@@ -1,68 +1,307 @@
-'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { login } from '@/lib/api';
-import { setToken } from '@/lib/auth';
-import Input from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
-
+"use client";
+import { FormEvent, useState } from "react";
+import Link from "next/link";
 export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    try {
-      const data = await login(email, password);
-      setToken(data.access);
-      router.push('/dashboard');
-    } catch {
-      setError('Invalid credentials. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  }
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    /*
+      BACKEND INTEGRATION LATER
+      const response = await authApi.login({
+        email: formData.email,
+        password: formData.password,
+      });
+      setToken(response.access_token);
+      router.push("/dashboard");
+    */
+    console.log("Login:", {
+      email: formData.email,
+      rememberMe,
+    });
+  };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h1>
-        <p className="text-sm text-gray-500 mb-6">Sign in to Urban Furniture ERP</p>
-        {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            required
+    <div className="w-full">
+      {/* =====================================================
+          HEADER
+      ====================================================== */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2">
+          <h1 className="text-4xl font-bold tracking-[-0.035em] text-[#2C2C2C]">
+            Welcome back
+          </h1>
+          <span className="text-2xl text-[#6B705C]">
+          </span>
+        </div>
+        <p className="mt-3 text-base leading-6 text-[#737373]">
+          Sign in to your Urban Furniture account
+        </p>
+      </div>
+      {/* =====================================================
+          LOGIN / CREATE USER SWITCH
+      ====================================================== */}
+      <div className="rounded-2xl border border-[#E5E1D9] bg-white p-1.5 shadow-[0_12px_40px_rgba(44,44,44,0.05)]">
+        <div className="grid grid-cols-2 gap-1 rounded-xl bg-[#F8F6F1] p-1">
+          <Link
+            href="/login"
+            className="flex h-12 items-center justify-center rounded-lg bg-white text-base font-semibold text-[#2C2C2C] shadow-sm"
+          >
+            Log In
+          </Link>
+          <Link
+            href="/signup"
+            className="flex h-12 items-center justify-center rounded-lg text-base font-medium text-[#737373] transition hover:text-[#2C2C2C]"
+          >
+            Create User
+          </Link>
+        </div>
+      </div>
+      {/* =====================================================
+          LOGIN FORM
+      ====================================================== */}
+      <form
+        onSubmit={handleSubmit}
+        className="mt-8 space-y-6"
+      >
+        {/* Email */}
+        <div>
+          <label
+            htmlFor="email"
+            className="mb-2 block text-base font-semibold text-[#2C2C2C]"
+          >
+            Email
+          </label>
+          <div className="relative">
+            <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#858585]">
+              <EmailIcon />
+            </div>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              value={formData.email}
+              onChange={(event) =>
+                setFormData({
+                  ...formData,
+                  email: event.target.value,
+                })
+              }
+              placeholder="Enter your email"
+              className="h-14 w-full rounded-xl border border-[#DCD8D0] bg-white pl-12 pr-4 text-base text-[#2C2C2C] outline-none transition placeholder:text-[#A0A0A0] focus:border-[#6B705C] focus:ring-4 focus:ring-[#6B705C]/10"
+            />
+          </div>
+        </div>
+        {/* Password */}
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <label
+              htmlFor="password"
+              className="text-base font-semibold text-[#2C2C2C]"
+            >
+              Password
+            </label>
+            <button
+              type="button"
+              className="text-sm font-medium text-[#6B705C] transition hover:text-[#4F5545]"
+            >
+              Forgot password?
+            </button>
+          </div>
+          <div className="relative">
+            <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#858585]">
+              <LockIcon />
+            </div>
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              required
+              autoComplete="current-password"
+              value={formData.password}
+              onChange={(event) =>
+                setFormData({
+                  ...formData,
+                  password: event.target.value,
+                })
+              }
+              placeholder="Enter your password"
+              className="h-14 w-full rounded-xl border border-[#DCD8D0] bg-white pl-12 pr-12 text-base text-[#2C2C2C] outline-none transition placeholder:text-[#A0A0A0] focus:border-[#6B705C] focus:ring-4 focus:ring-[#6B705C]/10"
+            />
+            <button
+              type="button"
+              onClick={() =>
+                setShowPassword((current) => !current)
+              }
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#858585] transition hover:text-[#2C2C2C]"
+              aria-label={
+                showPassword
+                  ? "Hide password"
+                  : "Show password"
+              }
+            >
+              {showPassword ? (
+                <EyeOffIcon />
+              ) : (
+                <EyeIcon />
+              )}
+            </button>
+          </div>
+        </div>
+        {/* Remember me */}
+        <label className="flex cursor-pointer items-center gap-3">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(event) =>
+              setRememberMe(event.target.checked)
+            }
+            className="h-4 w-4 rounded border-[#CFCBC3] accent-[#6B705C]"
           />
-          <Input
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            required
-          />
-          <Button type="submit" className="w-full" loading={loading}>
-            Sign in
-          </Button>
-        </form>
-        <p className="text-sm text-center text-gray-500 mt-6">
-          Don&apos;t have an account?{' '}
-          <a href="/signup" className="text-indigo-600 hover:underline font-medium">
-            Sign up
-          </a>
+          <span className="text-sm font-medium text-[#737373]">
+            Remember me
+          </span>
+        </label>
+        {/* Submit */}
+        <button
+          type="submit"
+          className="h-14 w-full rounded-xl bg-[#6B705C] text-base font-semibold text-white shadow-sm transition hover:bg-[#59604E] focus:outline-none focus:ring-4 focus:ring-[#6B705C]/20 active:scale-[0.99]"
+        >
+          Log In
+        </button>
+      </form>
+      {/* =====================================================
+          SIGNUP
+      ====================================================== */}
+      <div className="mt-8 border-t border-[#E7E3DB] pt-7">
+        <p className="text-center text-base text-[#737373]">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/signup"
+            className="font-semibold text-[#6B705C] transition hover:text-[#4F5545]"
+          >
+            Create User
+          </Link>
+          <span className="ml-2 text-[#6B705C]">
+            →
+          </span>
         </p>
       </div>
     </div>
+  );
+}
+/* =========================================================
+   ICONS
+========================================================= */
+function EmailIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-5 w-5"
+    >
+      <rect
+        x="3"
+        y="5"
+        width="18"
+        height="14"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+      <path
+        d="M4 7L12 13L20 7"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+function LockIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-5 w-5"
+    >
+      <rect
+        x="5"
+        y="10"
+        width="14"
+        height="10"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+      <path
+        d="M8 10V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V10"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+function EyeIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-5 w-5"
+    >
+      <path
+        d="M2.5 12C3.5 9 7 5 12 5C17 5 20.5 9 21.5 12C20.5 15 17 19 12 19C7 19 3.5 15 2.5 12Z"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+      <circle
+        cx="12"
+        cy="12"
+        r="3"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+    </svg>
+  );
+}
+function EyeOffIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-5 w-5"
+    >
+      <path
+        d="M3 3L21 21"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+      <path
+        d="M10.6 10.6A2 2 0 0013.4 13.4"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+      <path
+        d="M9.9 5.2A10.8 10.8 0 0112 5C17 5 20.5 9 21.5 12C21 13.5 19.8 15.3 18 16.8"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+      <path
+        d="M6.1 6.2A11.5 11.5 0 002.5 12C3.5 15 7 19 12 19C13.3 19 14.5 18.7 15.6 18.2"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
