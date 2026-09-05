@@ -3,7 +3,7 @@ from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.dependencies.auth import get_current_user
+from app.dependencies.auth import require_accountant_or_admin
 from app.models.budget import Budget
 from app.models.purchase_order import PurchaseOrder
 from app.models.sales_order import SalesOrder
@@ -25,7 +25,7 @@ router = APIRouter(prefix="/api/dashboard", tags=["Dashboard"])
 )
 def get_dashboard_summary(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_accountant_or_admin),
 ):
     """
     Returns aggregated counts for Sales Orders, Purchase Orders, and Budgets.
