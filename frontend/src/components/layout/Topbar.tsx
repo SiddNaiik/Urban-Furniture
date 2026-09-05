@@ -1,44 +1,98 @@
 'use client';
 
-import { useAuth } from '@/hooks/useAuth';
-import { removeToken } from '@/lib/auth';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import Link from 'next/link';
 
-interface TopbarProps {
-  onMenuClick: () => void;
-}
+const NAV_MENUS = {
+  Sales: [
+    { label: "Sales Orders",  href: "/sales-orders" },
+    { label: "Customer Invoices", href: "/customer-invoices" },
+    { label: "Payments Received", href: "/payments" },
+  ],
+  Purchase: [
+    { label: "Purchase Orders", href: "/purchase-orders" },
+    { label: "Vendor Bills",    href: "/vendor-bills" },
+    { label: "Payments Sent",   href: "/payments" },
+  ],
+  Account: [
+    { label: "Contacts",           href: "/contacts" },
+    { label: "Products",           href: "/products" },
+    { label: "Chart of Accounts",  href: "/chart-of-accounts" },
+    { label: "Journals",          href: "/journals" },
+    { label: "Journal Entries",   href: "/journal-entries" },
+    { label: "Analytic Accounts", href: "/analytic-accounts" },
+    { label: "Budgets",           href: "/budgets" },
+  ],
+  Report: [
+    { label: "Profit & Loss", href: "/reports/profit-loss" },
+    { label: "Balance Sheet", href: "/reports/balance-sheet" },
+    { label: "Budget Report", href: "/reports/budget-report" },
+  ],
+};
 
-export default function Topbar({ onMenuClick }: TopbarProps) {
-  const { user } = useAuth();
-  const router = useRouter();
-
-  function handleLogout() {
-    removeToken();
-    router.push('/login');
-  }
+export default function Topbar() {
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   return (
-    <header className="flex h-14 items-center justify-between border-b border-gray-200 bg-white px-4 shadow-sm">
-      <button
-        onClick={onMenuClick}
-        className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 lg:hidden"
-        aria-label="Open sidebar"
-      >
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+    <header className="h-16 bg-white border-b border-[#E5E3DC] flex items-center justify-between px-8 sticky top-0 z-40 shadow-2xs">
+      {/* Menu items */}
+      <nav className="flex items-center gap-1">
+        {Object.keys(NAV_MENUS).map((menuKey) => {
+          const isOpen = activeMenu === menuKey;
+          const items = NAV_MENUS[menuKey as keyof typeof NAV_MENUS];
 
-      <div className="ml-auto flex items-center gap-4">
-        <span className="text-sm text-gray-600">
-          {user?.name || user?.email || 'User'}
-        </span>
-        <button
-          onClick={handleLogout}
-          className="rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 transition-colors"
-        >
-          Sign out
-        </button>
+          return (
+            <div key={menuKey} className="relative">
+              <button
+                onClick={() => setActiveMenu(isOpen ? null : menuKey)}
+                className={`flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg font-medium transition-colors cursor-pointer ${
+                  isOpen
+                    ? "bg-[#6B705C]/10 text-[#6B705C]"
+                    : "text-[#737373] hover:text-[#2C2C2C] hover:bg-[#F8F6F1]"
+                }`}
+              >
+                {menuKey}
+                <svg
+                  width="12" height="12" viewBox="0 0 12 12" fill="none"
+                  className={`transition-transform duration-200 ${isOpen ? "rotate-180 text-[#6B705C]" : "text-[#A5A58D]"}`}
+                >
+                  <path d="M2.5 4.5l3.5 3.5 3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              {isOpen && (
+                <>
+                  <div className="fixed inset-0 z-30" onClick={() => setActiveMenu(null)} />
+                  <div className="absolute top-full left-0 mt-1.5 bg-white border border-[#E5E3DC] rounded-xl shadow-lg z-40 min-w-[200px] py-1.5 animate-in fade-in zoom-in-95 duration-100">
+                    {items.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setActiveMenu(null)}
+                        className="block px-4 py-2.5 text-sm text-[#2C2C2C] hover:bg-[#F8F6F1] hover:text-[#6B705C] transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </nav>
+
+      {/* User profile dropdown trigger */}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-[#E5E3DC] bg-[#F8F6F1]/50 hover:bg-[#F8F6F1] transition-colors cursor-pointer">
+          <div className="w-7 h-7 rounded-full bg-[#6B705C] flex items-center justify-center text-white text-xs font-semibold">
+            A
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="text-xs font-semibold text-[#2C2C2C]">Admin User</span>
+            <span className="text-[10px] text-[#737373]">Administrator</span>
+          </div>
+        </div>
       </div>
     </header>
   );

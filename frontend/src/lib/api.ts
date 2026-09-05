@@ -529,3 +529,15 @@ export async function updateBudget(
 
   return res.data;
 }
+
+export async function getMe() {
+  const res = await apiClient.get("/auth/me");
+
+  return res.data;
+}
+
+export async function getDashboardSummary() {
+  const res = await apiClient.get("/dashboard/summary");
+
+  return res.data;
+}
