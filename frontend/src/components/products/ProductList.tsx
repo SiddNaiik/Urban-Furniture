@@ -10,7 +10,6 @@ import ViewToggle from '@/components/ui/ViewToggle';
 import ProductKanban from './ProductKanban';
 import { MOCK_PRODUCTS } from '@/lib/mockData';
 import { formatCurrency } from '@/lib/utils';
-import { ui } from '@/lib/theme';
 
 /*
   BACKEND DYNAMIC API CODE:
@@ -24,18 +23,23 @@ export default function ProductList() {
   const router = useRouter();
   const [view, setView] = useState<'list' | 'kanban'>('list');
   const [search, setSearch] = useState('');
-  const [products] = useState(MOCK_PRODUCTS);
+  const [products, setProducts] = useState(MOCK_PRODUCTS);
+
+  function handleUpdateProduct(updated: typeof MOCK_PRODUCTS[number]) {
+    setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  }
+
 
   const filtered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
-    (p.sku && p.sku.toLowerCase().includes(search.toLowerCase())) ||
-    (p.category && p.category.toLowerCase().includes(search.toLowerCase()))
+    (p.category && p.category.toLowerCase().includes(search.toLowerCase())) ||
+    p.type.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-        <SearchBar value={search} onChange={setSearch} placeholder="Search products by SKU, name, or category..." className="max-w-md flex-1" />
+        <SearchBar value={search} onChange={setSearch} placeholder="Search products by name, category, or type..." className="max-w-md flex-1" />
         <div className="flex items-center gap-3">
           <ViewToggle view={view} onChange={setView} />
           <Button onClick={() => router.push('/products/new')}>+ New Product</Button>
@@ -45,19 +49,19 @@ export default function ProductList() {
       {view === 'list' ? (
         <Table
           columns={[
-            { key: 'sku', header: 'SKU', render: (p) => <span className="font-mono text-xs text-[#737373]">{p.sku || '-'}</span> },
-            { key: 'name', header: 'Product Name', render: (p) => <span className="font-semibold text-[#2C2C2C]">{p.name}</span> },
+            { key: 'name', header: 'Product', render: (p) => <span className="font-semibold text-[#2C2C2C]">{p.name}</span> },
             { key: 'category', header: 'Category', render: (p) => <span className="text-xs font-medium text-[#A5A58D] uppercase tracking-wider">{p.category || 'General'}</span> },
-            { key: 'lst_price', header: 'Sales Price', render: (p) => <span className="font-mono font-medium text-[#2C2C2C]">{formatCurrency(p.lst_price)}</span> },
-            { key: 'standard_price', header: 'Cost Price', render: (p) => <span className="font-mono text-[#737373]">{formatCurrency(p.standard_price || 0)}</span> },
-            { key: 'qty_available', header: 'On Hand', render: (p) => <Badge variant={p.qty_available > 10 ? 'success' : 'warning'}>{p.qty_available} in stock</Badge> },
+            { key: 'type', header: 'Type', render: (p) => <Badge variant="warning">{p.type}</Badge>},
+            { key: 'sales_price', header: 'Sales Price', render: (p) => <span className="font-mono font-medium text-[#2C2C2C]">{formatCurrency(p.sales_price)}</span> },
+            { key: 'cost', header: 'Cost', render: (p) => <span className="font-mono text-[#737373]">{formatCurrency(p.cost)}</span> },
+            { key: 'is_active', header: 'Status', render: (p) => <Badge variant={p.is_active ? 'success' : 'warning'}>{p.is_active ? 'Active' : 'Archived'}</Badge> },
           ]}
           data={filtered}
           keyExtractor={(p) => p.id}
           onRowClick={(p) => router.push(`/products/${p.id}`)}
         />
       ) : (
-        <ProductKanban products={filtered} />
+        <ProductKanban products={filtered} onUpdateProduct={handleUpdateProduct} />
       )}
     </div>
   );

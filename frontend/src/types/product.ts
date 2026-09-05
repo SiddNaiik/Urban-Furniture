@@ -1,23 +1,20 @@
+export type ProductType = 'Goods' | 'Service' | 'Combo';
+
+export interface ProductCategory {
+  id: string;
+  name: string;
+}
+
 export interface Product {
   id: string;
   name: string;
-  sku?: string;
-  category?: string;
-  price: number | string;
-  lst_price: number;
-  cost?: number | string;
-  standard_price?: number;
-  stock?: number;
-  qty_available: number;
-  description?: string;
+  type: ProductType;
+  category_id: string;
+  category?: string; // resolved category name for display
+  sales_price: number;
+  cost: number;
+  image_url?: string | null;
+  is_active: boolean;
   created_at?: string;
   updated_at?: string;
-}
-
-export interface ProductInput {
-  name: string;
-  sku?: string;
-  category?: string;
-  price?: number | string;
-  cost?: number | string;
 }
