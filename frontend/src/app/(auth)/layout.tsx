@@ -6,9 +6,9 @@ export default function AuthLayout({
 }) {
   return (
     <main className="min-h-screen bg-[#F8F6F1] lg:grid lg:grid-cols-[55%_45%]">
-      {/* =====================================================
+      {/* 
           LEFT SIDE — STATIC
-      ===================================================== */}
+       */}
       <section className="relative hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:overflow-hidden">
         {/* Furniture Background */}
         <div
@@ -86,9 +86,9 @@ export default function AuthLayout({
           </div>
         </div>
       </section>
-      {/* =====================================================
+      {/* 
           RIGHT SIDE — SCROLLABLE FORM
-      ===================================================== */}
+       */}
       <section className="min-h-screen bg-[#FCFBF8]">
         <div className="flex min-h-screen items-center justify-center px-6 py-10 sm:px-10">
           <div className="w-full max-w-[500px]">
@@ -122,9 +122,9 @@ export default function AuthLayout({
     </main>
   );
 }
-/* =========================================================
+/* ====
    FEATURE COMPONENT
-========================================================= */
+==== */
 function Feature({
   icon,
   title,
