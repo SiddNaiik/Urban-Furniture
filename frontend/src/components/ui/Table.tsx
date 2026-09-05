@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { ui } from '@/lib/theme';
 
 interface Column<T> {
   key: keyof T | string;
@@ -25,24 +26,24 @@ export default function Table<T>({
   emptyMessage = 'No records found.',
 }: TableProps<T>) {
   return (
-    <div className={cn('overflow-x-auto rounded-lg border border-gray-200', className)}>
-      <table className="min-w-full divide-y divide-gray-200 text-sm">
-        <thead className="bg-gray-50">
+    <div className={cn('overflow-x-auto rounded-xl border border-[#E5E3DC] bg-white shadow-sm', className)}>
+      <table className={ui.table}>
+        <thead>
           <tr>
             {columns.map((col) => (
               <th
                 key={String(col.key)}
-                className={cn('px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500', col.className)}
+                className={cn(ui.th, col.className)}
               >
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 bg-white">
+        <tbody className="divide-y divide-[#E5E3DC]">
           {data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-4 py-8 text-center text-gray-400">
+              <td colSpan={columns.length} className="px-4 py-12 text-center text-[#737373] text-sm">
                 {emptyMessage}
               </td>
             </tr>
@@ -51,10 +52,10 @@ export default function Table<T>({
               <tr
                 key={keyExtractor(row)}
                 onClick={() => onRowClick?.(row)}
-                className={cn(onRowClick && 'cursor-pointer hover:bg-gray-50 transition-colors')}
+                className={cn(ui.td, onRowClick && ui.trHover)}
               >
                 {columns.map((col) => (
-                  <td key={String(col.key)} className={cn('px-4 py-3 text-gray-700', col.className)}>
+                  <td key={String(col.key)} className={cn('px-4 py-3 text.brand-text', col.className)}>
                     {col.render ? col.render(row) : String((row as Record<string, unknown>)[String(col.key)] ?? '')}
                   </td>
                 ))}
