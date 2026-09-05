@@ -60,7 +60,7 @@ export default function LoginPage() {
         </p>
       </div>
       {/* 
-          LOGIN / CREATE USER SWITCH
+          LOGIN / Sign Up SWITCH
        */}
       <div className="rounded-2xl border border-[#E5E1D9] bg-white p-1.5 shadow-[0_12px_40px_rgba(44,44,44,0.05)]">
         <div className="grid grid-cols-2 gap-1 rounded-xl bg-[#F8F6F1] p-1">
@@ -71,12 +71,12 @@ export default function LoginPage() {
           >
             Log In
           </Link>
-          {/* Create User */}
+          {/* Sign Up */}
           <Link
             href="/signup"
             className="flex h-12 items-center justify-center rounded-lg text-base font-medium text-[#737373] transition hover:text-[#2C2C2C]"
           >
-            Create User
+            Sign Up
           </Link>
         </div>
       </div>
@@ -217,7 +217,7 @@ export default function LoginPage() {
         </button>
       </form>
       {/* 
-          CREATE USER
+          Sign Up
        */}
       <div className="mt-8 border-t border-[#E7E3DB] pt-7">
         <p className="text-center text-base text-[#737373]">
@@ -226,7 +226,7 @@ export default function LoginPage() {
             href="/signup"
             className="font-semibold text-[#6B705C] transition hover:text-[#4F5545]"
           >
-            Create User
+            Sign Up
           </Link>
           <span className="ml-2 text-[#6B705C]">
             →
