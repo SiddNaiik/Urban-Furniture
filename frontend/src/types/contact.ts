@@ -12,6 +12,8 @@ export interface Contact {
   country?: string;
   created_at?: string;
   updated_at?: string;
+  imageUrl?: string | null;
+  pincode?: string;
 }
 
 export interface ContactInput {
@@ -19,4 +21,11 @@ export interface ContactInput {
   email?: string;
   phone?: string;
   type: ContactType;
+  street?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  pincode?: string;
 }
+
+
