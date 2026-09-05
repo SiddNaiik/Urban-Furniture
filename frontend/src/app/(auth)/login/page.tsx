@@ -1,41 +1,59 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
 export default function LoginPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  /* =====================================================
+     LOGIN
+  ===================================================== */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    const email = formData.email.trim();
+    const password = formData.password;
+    if (!email || !password) {
+      setError("Please enter your email and password.");
+      return;
+    }
     /*
-      BACKEND INTEGRATION LATER
+      FUTURE BACKEND INTEGRATION:
       const response = await authApi.login({
-        email: formData.email,
-        password: formData.password,
+        email,
+        password,
       });
-      setToken(response.access_token);
-      router.push("/dashboard");
+      if (!response.success) {
+        setError(response.message);
+        return;
+      }
+      auth.setToken(response.token);
     */
+    // Temporary frontend login
     console.log("Login:", {
-      email: formData.email,
+      email,
+      password,
       rememberMe,
     });
+    // Successful login → Dashboard
+    router.push("/dashboard");
   };
   return (
     <div className="w-full">
       {/* =====================================================
           HEADER
-      ====================================================== */}
+      ===================================================== */}
       <div className="mb-8">
         <div className="flex items-center gap-2">
           <h1 className="text-4xl font-bold tracking-[-0.035em] text-[#2C2C2C]">
             Welcome back
           </h1>
-          <span className="text-2xl text-[#6B705C]">
-          </span>
         </div>
         <p className="mt-3 text-base leading-6 text-[#737373]">
           Sign in to your Urban Furniture account
@@ -43,15 +61,17 @@ export default function LoginPage() {
       </div>
       {/* =====================================================
           LOGIN / CREATE USER SWITCH
-      ====================================================== */}
+      ===================================================== */}
       <div className="rounded-2xl border border-[#E5E1D9] bg-white p-1.5 shadow-[0_12px_40px_rgba(44,44,44,0.05)]">
         <div className="grid grid-cols-2 gap-1 rounded-xl bg-[#F8F6F1] p-1">
+          {/* Login */}
           <Link
             href="/login"
             className="flex h-12 items-center justify-center rounded-lg bg-white text-base font-semibold text-[#2C2C2C] shadow-sm"
           >
             Log In
           </Link>
+          {/* Create User */}
           <Link
             href="/signup"
             className="flex h-12 items-center justify-center rounded-lg text-base font-medium text-[#737373] transition hover:text-[#2C2C2C]"
@@ -62,12 +82,14 @@ export default function LoginPage() {
       </div>
       {/* =====================================================
           LOGIN FORM
-      ====================================================== */}
+      ===================================================== */}
       <form
         onSubmit={handleSubmit}
         className="mt-8 space-y-6"
       >
-        {/* Email */}
+        {/* ===================================================
+            EMAIL
+        =================================================== */}
         <div>
           <label
             htmlFor="email"
@@ -76,6 +98,7 @@ export default function LoginPage() {
             Email
           </label>
           <div className="relative">
+            {/* Email Icon */}
             <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#858585]">
               <EmailIcon />
             </div>
@@ -97,7 +120,9 @@ export default function LoginPage() {
             />
           </div>
         </div>
-        {/* Password */}
+        {/* ===================================================
+            PASSWORD
+        =================================================== */}
         <div>
           <div className="mb-2 flex items-center justify-between">
             <label
@@ -106,17 +131,20 @@ export default function LoginPage() {
             >
               Password
             </label>
-            <button
-              type="button"
-              className="text-sm font-medium text-[#6B705C] transition hover:text-[#4F5545]"
+            {/* Forgot Password */}
+            <Link
+              href="/forgot-password"
+              className="text-sm font-medium text-[#6B705C] transition hover:text-[#4F5545] hover:underline"
             >
               Forgot password?
-            </button>
+            </Link>
           </div>
           <div className="relative">
+            {/* Lock Icon */}
             <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#858585]">
               <LockIcon />
             </div>
+            {/* Password Input */}
             <input
               id="password"
               name="password"
@@ -133,6 +161,7 @@ export default function LoginPage() {
               placeholder="Enter your password"
               className="h-14 w-full rounded-xl border border-[#DCD8D0] bg-white pl-12 pr-12 text-base text-[#2C2C2C] outline-none transition placeholder:text-[#A0A0A0] focus:border-[#6B705C] focus:ring-4 focus:ring-[#6B705C]/10"
             />
+            {/* Show / Hide Password */}
             <button
               type="button"
               onClick={() =>
@@ -153,7 +182,17 @@ export default function LoginPage() {
             </button>
           </div>
         </div>
-        {/* Remember me */}
+        {/* ===================================================
+            ERROR
+        =================================================== */}
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+        {/* ===================================================
+            REMEMBER ME
+        =================================================== */}
         <label className="flex cursor-pointer items-center gap-3">
           <input
             type="checkbox"
@@ -167,7 +206,9 @@ export default function LoginPage() {
             Remember me
           </span>
         </label>
-        {/* Submit */}
+        {/* ===================================================
+            LOGIN BUTTON
+        =================================================== */}
         <button
           type="submit"
           className="h-14 w-full rounded-xl bg-[#6B705C] text-base font-semibold text-white shadow-sm transition hover:bg-[#59604E] focus:outline-none focus:ring-4 focus:ring-[#6B705C]/20 active:scale-[0.99]"
@@ -176,8 +217,8 @@ export default function LoginPage() {
         </button>
       </form>
       {/* =====================================================
-          SIGNUP
-      ====================================================== */}
+          CREATE USER
+      ===================================================== */}
       <div className="mt-8 border-t border-[#E7E3DB] pt-7">
         <p className="text-center text-base text-[#737373]">
           Don&apos;t have an account?{" "}
@@ -196,7 +237,7 @@ export default function LoginPage() {
   );
 }
 /* =========================================================
-   ICONS
+   EMAIL ICON
 ========================================================= */
 function EmailIcon() {
   return (
@@ -224,6 +265,9 @@ function EmailIcon() {
     </svg>
   );
 }
+/* =========================================================
+   LOCK ICON
+========================================================= */
 function LockIcon() {
   return (
     <svg
@@ -249,6 +293,9 @@ function LockIcon() {
     </svg>
   );
 }
+/* =========================================================
+   EYE ICON
+========================================================= */
 function EyeIcon() {
   return (
     <svg
@@ -271,6 +318,9 @@ function EyeIcon() {
     </svg>
   );
 }
+/* =========================================================
+   EYE OFF ICON
+========================================================= */
 function EyeOffIcon() {
   return (
     <svg

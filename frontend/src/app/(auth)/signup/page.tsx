@@ -1,7 +1,9 @@
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 export default function SignupPage() {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('accountant');
@@ -12,36 +14,52 @@ export default function SignupPage() {
   const [error, setError] = useState('');
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setError('');
+
     if (!name || !email || !password || !confirmPassword) {
       setError('Please fill in all required fields.');
       return;
     }
+
     if (password.length < 8) {
       setError('Password must be at least 8 characters.');
       return;
     }
+
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       return;
     }
+
     /*
-      Future backend integration:
+      Later, when backend is connected:
+
       const response = await authApi.signup({
         name,
         email,
         role,
         password,
       });
-      After successful signup:
-      router.push('/login');
+
+      if (!response.success) {
+        setError(response.message);
+        return;
+      }
     */
-    console.log({
+
+    // For now, simulate successful account creation
+    console.log('User created:', {
       name,
       email,
       role,
       password,
     });
+
+    // IMPORTANT:
+    // Do not login automatically.
+    // Send the user back to the login page.
+    router.push('/login');
   };
   return (
     <div className="w-full">
@@ -50,7 +68,7 @@ export default function SignupPage() {
       ===================================================== */}
       <div className="mb-7">
         <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#2C2C2C]">
-          Create your account
+          Sign Up your account
           <span className="ml-1 text-[#6B705C]">✦</span>
         </h1>
         <p className="mt-2 text-sm leading-6 text-[#737373]">
@@ -58,7 +76,7 @@ export default function SignupPage() {
         </p>
       </div>
       {/* =====================================================
-          LOGIN / CREATE USER TABS
+          LOGIN / Sign Up TABS
       ===================================================== */}
       <div className="mb-6 grid grid-cols-2 rounded-xl border border-[#E3E0D8] bg-white p-1">
         <Link
@@ -68,7 +86,7 @@ export default function SignupPage() {
           Log In
         </Link>
         <div className="flex h-10 items-center justify-center rounded-lg bg-[#6B705C] text-sm font-medium text-white shadow-sm">
-          Create User
+          Sign Up
         </div>
       </div>
       {/* =====================================================
@@ -223,12 +241,12 @@ export default function SignupPage() {
             BUTTONS
         ===================================================== */}
         <div className="grid grid-cols-2 gap-3 pt-2">
-          {/* Create User */}
+          {/* Sign Up */}
           <button
             type="submit"
             className="h-11 rounded-xl bg-[#6B705C] px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#5B604F] focus:outline-none focus:ring-2 focus:ring-[#6B705C]/20"
           >
-            Create User
+            Sign Up
           </button>
           {/* Cancel */}
           <Link
