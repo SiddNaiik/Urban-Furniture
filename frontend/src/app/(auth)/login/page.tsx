@@ -236,9 +236,6 @@ export default function LoginPage() {
     </div>
   );
 }
-/* ====
-   EMAIL ICON
-==== */
 function EmailIcon() {
   return (
     <svg
@@ -265,9 +262,6 @@ function EmailIcon() {
     </svg>
   );
 }
-/* ====
-   LOCK ICON
-==== */
 function LockIcon() {
   return (
     <svg
@@ -293,9 +287,6 @@ function LockIcon() {
     </svg>
   );
 }
-/* ====
-   EYE ICON
-==== */
 function EyeIcon() {
   return (
     <svg
@@ -318,9 +309,6 @@ function EyeIcon() {
     </svg>
   );
 }
-/* ====
-   EYE OFF ICON
-==== */
 function EyeOffIcon() {
   return (
     <svg

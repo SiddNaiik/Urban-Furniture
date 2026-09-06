@@ -324,17 +324,12 @@ export default function SignupPage() {
             </button>
 
           </div>
-
-
-          {/* Inline Confirm Password Error */}
           {confirmPassword.length > 0 && !passwordsMatch && (
             <p className="mt-1.5 flex items-center gap-1 text-xs font-medium text-red-500">
               <span>✕</span>
               Passwords do not match
             </p>
           )}
-
-          {/* Password Match */}
           {passwordsMatch && (
             <p className="mt-1.5 flex items-center gap-1 text-xs font-medium text-[#6B705C]">
               <span>✓</span>
@@ -379,9 +374,6 @@ export default function SignupPage() {
           >
             SIgn Up
           </button>
-
-
-          {/* Cancel */}
           <Link
             href="/login"
             className="flex h-12 items-center justify-center rounded-xl border border-[#DCD9D0] bg-white px-5 text-sm font-semibold text-[#2C2C2C] transition hover:bg-[#F8F6F1]"

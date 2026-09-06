@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { getToken, removeToken } from './auth';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -330,14 +331,5 @@ export async function createBudget(data: unknown) {
 
 export async function updateBudget(id: string, data: unknown) {
   const res = await apiClient.put(`/budgets/${id}/`, data);
-  return res.data;
-}
-export async function getMe() {
-  const res = await apiClient.get('/auth/me');
-  return res.data;
-}
-
-export async function getDashboardSummary() {
-  const res = await apiClient.get('/dashboard/summary');
   return res.data;
 }
