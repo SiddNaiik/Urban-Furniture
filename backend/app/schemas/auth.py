@@ -101,3 +101,18 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserResponse
+
+
+class UserUpdateAdminRequest(BaseModel):
+    name: str | None = None
+    email: EmailStr | None = None
+    role: Literal["admin", "accountant", "user"] | None = None
+    is_active: bool | None = None
+    password: str | None = None
+
+    @field_validator("email", mode="before")
+    @classmethod
+    def normalize_email(cls, v):
+        if v is None:
+            return v
+        return str(v).strip().lower()

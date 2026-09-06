@@ -6,13 +6,16 @@ import Table from '@/components/ui/Table';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import SearchBar from '@/components/ui/SearchBar';
-import { MOCK_USERS } from '@/lib/mockData';
-import { ui } from '@/lib/theme';
+import type { User } from '@/types/user';
 
-export default function UserList() {
+interface Props {
+  users?: User[];
+}
+
+export default function UserList({ users: propUsers }: Props) {
   const router = useRouter();
   const [search, setSearch] = useState('');
-  const [users] = useState(MOCK_USERS);
+  const users = propUsers ?? [];
 
   const filtered = users.filter(
     (u) =>
@@ -46,14 +49,14 @@ export default function UserList() {
             key: 'role',
             header: 'Role & Permissions',
             render: (u) => (
-              <Badge variant={u.role === 'Administrator' ? 'confirmed' : 'default'}>
-                {u.role}
+              <Badge variant={u.role === 'admin' ? 'confirmed' : 'default'}>
+                {u.role.charAt(0).toUpperCase() + u.role.slice(1)}
               </Badge>
             ),
           },
         ]}
         data={filtered}
-        keyExtractor={(u) => u.id}
+        keyExtractor={(u) => String(u.id)}
       />
     </div>
   );

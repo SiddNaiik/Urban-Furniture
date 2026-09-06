@@ -7,7 +7,7 @@ import Badge from "@/components/ui/Badge";
 import Table from "@/components/ui/Table";
 import { formatCurrency } from "@/lib/utils";
 import { MOCK_SALES_ORDERS, MOCK_PURCHASE_ORDERS, MOCK_CUSTOMER_INVOICES, MOCK_PRODUCTS } from "@/lib/mockData";
-import {getPurchaseOrders, } from "@/lib/api"
+import {getPurchaseOrders, getProducts } from "@/lib/api"
 import { ui } from "@/lib/theme";
 
 /*
@@ -20,22 +20,21 @@ import { ui } from "@/lib/theme";
   const { data: purchaseOrders = MOCK_PURCHASE_ORDERS } = useFetch(getPurchaseOrders);
   const { data: invoices = MOCK_CUSTOMER_INVOICES } = useFetch(getCustomerInvoices);
 */
-type PurchaseOrder = {  id: number;  total: number; status: string};
+type PurchaseOrder = {id: number;  total: number; status: string};
+type ProductOrder = {id: number; name: string; status: string; lst_price: number; qty_available: number};
 
 export default function DashboardPage() {
   const [sales] = useState(MOCK_SALES_ORDERS);
   const [purchases, setPurchases] = useState<PurchaseOrder[]>([]);
-
+  
   const [invoices] = useState(MOCK_CUSTOMER_INVOICES);
-  const [products] = useState(MOCK_PRODUCTS);
+  const [products, setProducts] = useState<ProductOrder[]>([]);
 
   useEffect(() => {
         async function loadPurchases() {
             const data = await getPurchaseOrders();
-
             setPurchases(data);
         }
-
         loadPurchases();
     }, []);
 

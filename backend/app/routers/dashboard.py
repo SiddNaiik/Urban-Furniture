@@ -25,6 +25,7 @@ router = APIRouter(prefix="/api/dashboard", tags=["Dashboard"])
 )
 def get_dashboard_summary(
     db: Session = Depends(get_db),
+    current_user: User = Depends(require_accountant_or_admin),
 ):
     """
     Returns aggregated counts for Sales Orders, Purchase Orders, and Budgets.

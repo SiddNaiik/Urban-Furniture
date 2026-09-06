@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 
-type CreateUserData = {
+export type CreateUserData = {
   name: string;
+  login_id: string;
   email: string;
   password: string;
   role: string;
@@ -19,9 +20,10 @@ export default function UserForm({
   onCancel,
 }: UserFormProps) {
   const [name, setName] = useState("");
+  const [loginId, setLoginId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("staff");
+  const [role, setRole] = useState("accountant");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,6 +38,12 @@ export default function UserForm({
     // Name validation
     if (!name.trim()) {
       setError("Please enter the user's name.");
+      return;
+    }
+
+    // Login ID validation
+    if (loginId.trim().length < 6 || loginId.trim().length > 12) {
+      setError("Login ID must be between 6 and 12 characters.");
       return;
     }
 
@@ -63,6 +71,7 @@ export default function UserForm({
 
       await onSave({
         name: name.trim(),
+        login_id: loginId.trim(),
         email: email.trim(),
         password,
         role,
@@ -110,6 +119,27 @@ export default function UserForm({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter full name"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#2C2C2C] outline-none transition focus:border-[#6B705C] focus:ring-1 focus:ring-[#6B705C]"
+          />
+        </div>
+
+        {/* Login ID */}
+        <div>
+          <label
+            htmlFor="user-login-id"
+            className="mb-1.5 block text-sm font-medium text-[#2C2C2C]"
+          >
+            Login ID (6–12 characters)
+          </label>
+
+          <input
+            id="user-login-id"
+            type="text"
+            value={loginId}
+            onChange={(e) => setLoginId(e.target.value)}
+            minLength={6}
+            maxLength={12}
+            placeholder="Enter login ID"
             className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-[#2C2C2C] outline-none transition focus:border-[#6B705C] focus:ring-1 focus:ring-[#6B705C]"
           />
         </div>
@@ -171,16 +201,16 @@ export default function UserForm({
             onChange={(e) => setRole(e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-[#2C2C2C] outline-none transition focus:border-[#6B705C] focus:ring-1 focus:ring-[#6B705C]"
           >
-            <option value="staff">
-              Staff
-            </option>
-
-            <option value="manager">
-              Manager
-            </option>
-
             <option value="admin">
-              Admin
+              Admin (Full Access)
+            </option>
+
+            <option value="accountant">
+              Accountant (Financial & Master Data)
+            </option>
+
+            <option value="user">
+              User (Customer / Restricted Portal)
             </option>
           </select>
         </div>

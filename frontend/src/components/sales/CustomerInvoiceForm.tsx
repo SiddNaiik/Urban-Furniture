@@ -62,7 +62,7 @@ export default function CustomerInvoiceForm({ id }: CustomerInvoiceFormProps) {
       const prod = MOCK_PRODUCTS.find((p) => p.id === value);
       if (prod) {
         line.name = prod.name;
-        line.price_unit = prod.lst_price;
+        line.price_unit = prod.lst_price ?? prod.sales_price ?? 0;
       }
     }
 
@@ -76,6 +76,7 @@ export default function CustomerInvoiceForm({ id }: CustomerInvoiceFormProps) {
 
   function addLine() {
     const firstProd = MOCK_PRODUCTS[0];
+    const unitPrice = firstProd.lst_price ?? firstProd.sales_price ?? 0;
     setLines([
       ...lines,
       {
@@ -83,8 +84,8 @@ export default function CustomerInvoiceForm({ id }: CustomerInvoiceFormProps) {
         product_id: firstProd.id,
         name: firstProd.name,
         quantity: 1,
-        price_unit: firstProd.lst_price,
-        amount: firstProd.lst_price,
+        price_unit: unitPrice,
+        amount: unitPrice,
       },
     ]);
   }

@@ -58,7 +58,7 @@ export default function SalesOrderForm({ id }: SalesOrderFormProps) {
       const prod = MOCK_PRODUCTS.find((p) => p.id === value);
       if (prod) {
         line.name = prod.name;
-        line.unit_price = prod.lst_price;
+        line.unit_price = prod.lst_price ?? prod.sales_price ?? 0;
       }
     }
 
@@ -72,6 +72,7 @@ export default function SalesOrderForm({ id }: SalesOrderFormProps) {
 
   function addLine() {
     const firstProd = MOCK_PRODUCTS[0];
+    const unitPrice = firstProd.lst_price ?? firstProd.sales_price ?? 0;
     setLines([
       ...lines,
       {
@@ -79,8 +80,8 @@ export default function SalesOrderForm({ id }: SalesOrderFormProps) {
         product_id: firstProd.id,
         name: firstProd.name,
         quantity: 1,
-        unit_price: firstProd.lst_price,
-        subtotal: firstProd.lst_price,
+        unit_price: unitPrice,
+        subtotal: unitPrice,
       },
     ]);
   }
@@ -178,7 +179,7 @@ export default function SalesOrderForm({ id }: SalesOrderFormProps) {
                         >
                           {MOCK_PRODUCTS.map((p) => (
                             <option key={p.id} value={p.id}>
-                              {p.name} ({formatCurrency(p.lst_price)})
+                              {p.name} ({formatCurrency(p.lst_price ?? p.sales_price ?? 0)})
                             </option>
                           ))}
                         </select>

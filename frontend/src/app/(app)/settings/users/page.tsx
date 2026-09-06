@@ -4,14 +4,11 @@ import { useEffect, useState } from "react";
 import { Plus, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import UserForm from "@/features/users/components/UserForm";
+import UserForm, { type CreateUserData } from "@/features/users/components/UserForm";
 import UserList from "@/features/users/components/UserList";
 
-import {
-  usersApi,
-  type User,
-  type CreateUserData,
-} from "@/lib/api";
+import { getUsers, createUser } from "@/lib/api";
+import type { User } from "@/types/user";
 
 export default function UsersPage() {
   const router = useRouter();
@@ -28,15 +25,7 @@ export default function UsersPage() {
   const loadUsers = async () => {
     try {
       setLoading(true);
-
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        throw new Error("Authentication required.");
-      }
-
-      const data = await usersApi.getUsers(token);
-
+      const data = await getUsers();
       setUsers(data);
     } catch (err) {
       setError(
@@ -49,25 +38,9 @@ export default function UsersPage() {
     }
   };
 
-  const handleCreateUser = async (
-    data: CreateUserData
-  ) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      throw new Error("Authentication required.");
-    }
-
-    const newUser = await usersApi.createUser(
-      token,
-      data
-    );
-
-    setUsers((currentUsers) => [
-      ...currentUsers,
-      newUser,
-    ]);
-
+  const handleCreateUser = async (data: CreateUserData) => {
+    const newUser = await createUser(data);
+    setUsers((currentUsers) => [...currentUsers, newUser]);
     setShowForm(false);
   };
 

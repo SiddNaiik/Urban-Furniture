@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useAuthContext } from '@/context/AuthContext';
 
 const NAV_MENUS = {
   Sales: [
@@ -32,6 +33,12 @@ const NAV_MENUS = {
 
 export default function Topbar() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const { user, logout } = useAuthContext();
+
+  const initials = (user?.name ?? 'U').slice(0, 1).toUpperCase();
+  const displayRole = user?.role
+    ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+    : '';
 
   return (
     <header className="h-16 bg-white border-b border-[#E5E3DC] flex items-center justify-between px-8 sticky top-0 z-40 shadow-2xs">
@@ -82,17 +89,28 @@ export default function Topbar() {
         })}
       </nav>
 
-      {/* User profile dropdown trigger */}
+      {/* User profile + logout */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-[#E5E3DC] bg-[#F8F6F1]/50 hover:bg-[#F8F6F1] transition-colors cursor-pointer">
+        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-[#E5E3DC] bg-[#F8F6F1]/50">
           <div className="w-7 h-7 rounded-full bg-[#6B705C] flex items-center justify-center text-white text-xs font-semibold">
-            A
+            {initials}
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-xs font-semibold text-[#2C2C2C]">Admin User</span>
-            <span className="text-[10px] text-[#737373]">Administrator</span>
+            <span className="text-xs font-semibold text-[#2C2C2C]">{user?.name ?? 'User'}</span>
+            <span className="text-[10px] text-[#737373]">{displayRole}</span>
           </div>
         </div>
+        <button
+          onClick={logout}
+          className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#737373] hover:text-[#C0392B] rounded-lg hover:bg-red-50 transition-colors"
+          title="Sign out"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
       </div>
     </header>
   );
