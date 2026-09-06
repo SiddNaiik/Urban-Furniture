@@ -46,7 +46,7 @@ export default function VendorBillList() {
         ]}
         data={filtered}
         keyExtractor={(b) => b.id}
-        onRowClick={(b) => router.push(`/vendor-bills/${b.id}`)}
+        onRowClick={(b) => router.push(`/vendor-bills/₹{b.id}`)}
       />
     </div>
   );

@@ -90,8 +90,8 @@ export default function JournalEntryForm({ id }: { id: string }) {
                   <tr className="bg-[#F8F6F1] border-b border-[#E5E3DC] text-[#737373] text-left text-xs font-semibold">
                     <th className="p-3">GL Account</th>
                     <th className="p-3">Label</th>
-                    <th className="p-3 w-36">Debit ($)</th>
-                    <th className="p-3 w-36">Credit ($)</th>
+                    <th className="p-3 w-36">Debit (₹)</th>
+                    <th className="p-3 w-36">Credit (₹)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E5E3DC]">

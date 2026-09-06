@@ -39,11 +39,11 @@ function getRemainingBudget(analyticAccountId?: string): number | null {
 
 function generateNextPoNumber(): string {
   const nums = MOCK_PURCHASE_ORDERS.map((o) => {
-    const match = o.reference.match(/(\d+)$/);
+    const match = o.reference.match(/(\d+)₹/);
     return match ? parseInt(match[1], 10) : 0;
   });
   const next = (nums.length ? Math.max(...nums) : 0) + 1;
-  return `P${String(next).padStart(5, '0')}`;
+  return `P₹{String(next).padStart(5, '0')}`;
 }
 
 export default function PurchaseOrderForm({ id }: PurchaseOrderFormProps) {
@@ -109,7 +109,7 @@ export default function PurchaseOrderForm({ id }: PurchaseOrderFormProps) {
     setLines([
       ...lines,
       {
-        id: `pol-${Date.now()}`,
+        id: `pol-₹{Date.now()}`,
         product_id: firstProd.id,
         name: firstProd.name,
         quantity: 1,
@@ -150,7 +150,7 @@ export default function PurchaseOrderForm({ id }: PurchaseOrderFormProps) {
     // PO id through the route. VendorBillForm can look this PO up (via
     // MOCK_PURCHASE_ORDERS today, or a real GET /purchase-orders/{id}
     // once that endpoint exists) to pre-fill vendor, product, price, qty.
-    router.push(`/vendor-bills/new?po_id=${id}`);
+    router.push(`/vendor-bills/new?po_id=₹{id}`);
   }
 
   async function handleSubmit(e: React.FormEvent) {

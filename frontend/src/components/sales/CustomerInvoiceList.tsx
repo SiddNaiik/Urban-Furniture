@@ -46,7 +46,7 @@ export default function CustomerInvoiceList() {
         ]}
         data={filtered}
         keyExtractor={(inv) => inv.id}
-        onRowClick={(inv) => router.push(`/customer-invoices/${inv.id}`)}
+        onRowClick={(inv) => router.push(`/customer-invoices/₹{inv.id}`)}
       />
     </div>
   );

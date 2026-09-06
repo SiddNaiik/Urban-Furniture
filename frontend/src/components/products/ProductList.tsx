@@ -58,7 +58,7 @@ export default function ProductList() {
           ]}
           data={filtered}
           keyExtractor={(p) => p.id}
-          onRowClick={(p) => router.push(`/products/${p.id}`)}
+          onRowClick={(p) => router.push(`/products/₹{p.id}`)}
         />
       ) : (
         <ProductKanban products={filtered} onUpdateProduct={handleUpdateProduct} />

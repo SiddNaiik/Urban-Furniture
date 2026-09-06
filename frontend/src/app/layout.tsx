@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} h-full`}>
+    <html lang="en" className={`₹{inter.variable} ₹{playfair.variable} ₹{jetbrains.variable} h-full`}>
       <body className="h-full bg-[#F8F6F1] text-[#2C2C2C] antialiased font-body">
         <AuthProvider>{children}</AuthProvider>
       </body>

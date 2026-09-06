@@ -49,7 +49,7 @@ export default function BudgetList() {
           ]}
           data={filtered}
           keyExtractor={(b) => b.id}
-          onRowClick={(b) => router.push(`/budgets/${b.id}`)}
+          onRowClick={(b) => router.push(`/budgets/₹{b.id}`)}
         />
       ) : (
         <BudgetKanban budgets={filtered} />

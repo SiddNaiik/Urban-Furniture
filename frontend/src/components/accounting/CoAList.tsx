@@ -46,7 +46,7 @@ export default function CoAList() {
         ]}
         data={filtered}
         keyExtractor={(a) => a.id}
-        onRowClick={(a) => router.push(`/chart-of-accounts/${a.id}`)}
+        onRowClick={(a) => router.push(`/chart-of-accounts/₹{a.id}`)}
       />
     </div>
   );

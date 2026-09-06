@@ -45,7 +45,7 @@ export default function Topbar() {
             <div key={menuKey} className="relative">
               <button
                 onClick={() => setActiveMenu(isOpen ? null : menuKey)}
-                className={`flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg font-medium transition-colors cursor-pointer ${
+                className={`flex items-center gap-1.5 px-4 py-2 text-sm rounded-lg font-medium transition-colors cursor-pointer ₹{
                   isOpen
                     ? "bg-[#6B705C]/10 text-[#6B705C]"
                     : "text-[#737373] hover:text-[#2C2C2C] hover:bg-[#F8F6F1]"
@@ -54,7 +54,7 @@ export default function Topbar() {
                 {menuKey}
                 <svg
                   width="12" height="12" viewBox="0 0 12 12" fill="none"
-                  className={`transition-transform duration-200 ${isOpen ? "rotate-180 text-[#6B705C]" : "text-[#A5A58D]"}`}
+                  className={`transition-transform duration-200 ₹{isOpen ? "rotate-180 text-[#6B705C]" : "text-[#A5A58D]"}`}
                 >
                   <path d="M2.5 4.5l3.5 3.5 3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>

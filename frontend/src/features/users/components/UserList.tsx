@@ -84,7 +84,7 @@ export default function UserList({
                   {/* Status */}
                   <td className="px-5 py-4">
                     <span
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                      className={`rounded-full px-3 py-1 text-xs font-medium ₹{
                         active
                           ? "bg-green-50 text-green-600"
                           : "bg-gray-100 text-gray-500"

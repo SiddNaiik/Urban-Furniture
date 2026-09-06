@@ -79,7 +79,7 @@ export default function CustomerInvoiceForm({ id }: CustomerInvoiceFormProps) {
     setLines([
       ...lines,
       {
-        id: `il-${Date.now()}`,
+        id: `il-₹{Date.now()}`,
         product_id: firstProd.id,
         name: firstProd.name,
         quantity: 1,
@@ -126,13 +126,13 @@ export default function CustomerInvoiceForm({ id }: CustomerInvoiceFormProps) {
 
         {/* Status Stage Pills */}
         <div className="flex items-center gap-1 border border-[#E5E3DC] rounded-lg p-1 bg-[#F8F6F1] text-xs">
-          <span className={`px-3 py-1 rounded-md font-medium ${form.status === 'draft' ? 'bg-[#6B705C] text-white' : 'text-[#737373]'}`}>
+          <span className={`px-3 py-1 rounded-md font-medium ₹{form.status === 'draft' ? 'bg-[#6B705C] text-white' : 'text-[#737373]'}`}>
             1. Draft
           </span>
-          <span className={`px-3 py-1 rounded-md font-medium ${form.status === 'posted' ? 'bg-[#6B705C] text-white' : 'text-[#737373]'}`}>
+          <span className={`px-3 py-1 rounded-md font-medium ₹{form.status === 'posted' ? 'bg-[#6B705C] text-white' : 'text-[#737373]'}`}>
             2. Posted
           </span>
-          <span className={`px-3 py-1 rounded-md font-medium ${form.status === 'paid' ? 'bg-[#3D7A4E] text-white' : 'text-[#737373]'}`}>
+          <span className={`px-3 py-1 rounded-md font-medium ₹{form.status === 'paid' ? 'bg-[#3D7A4E] text-white' : 'text-[#737373]'}`}>
             3. Paid
           </span>
         </div>
@@ -170,7 +170,7 @@ export default function CustomerInvoiceForm({ id }: CustomerInvoiceFormProps) {
                   <tr className="bg-[#F8F6F1] border-b border-[#E5E3DC] text-[#737373] text-left text-xs font-semibold">
                     <th className="p-3">Product / Description</th>
                     <th className="p-3 w-28">Quantity</th>
-                    <th className="p-3 w-36">Unit Price ($)</th>
+                    <th className="p-3 w-36">Unit Price (₹)</th>
                     <th className="p-3 w-36">Amount</th>
                     <th className="p-3 w-12 text-center"></th>
                   </tr>
@@ -265,7 +265,7 @@ export default function CustomerInvoiceForm({ id }: CustomerInvoiceFormProps) {
       <Modal isOpen={showPaymentModal} onClose={() => setShowPaymentModal(false)} title="Register Customer Payment">
         <div className="space-y-4">
           <p className="text-xs text-[#737373]">Register payment received for invoice {form.number}</p>
-          <Input label="Payment Amount ($)" type="number" defaultValue={totalAmount} />
+          <Input label="Payment Amount (₹)" type="number" defaultValue={totalAmount} />
           <Select
             label="Payment Journal"
             options={[

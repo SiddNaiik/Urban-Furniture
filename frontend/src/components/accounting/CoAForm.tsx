@@ -29,7 +29,7 @@ export default function CoAForm({ id }: { id: string }) {
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
-      <h1 className={ui.pageTitle}>{isNew ? 'New General Ledger Account' : `Edit Account: ${form.code}`}</h1>
+      <h1 className={ui.pageTitle}>{isNew ? 'New General Ledger Account' : `Edit Account: ₹{form.code}`}</h1>
       <Card>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -49,7 +49,7 @@ export default function CoAForm({ id }: { id: string }) {
             />
           </div>
           <Input label="Account Name" name="name" value={form.name} onChange={handleChange} required placeholder="e.g. Bank Operating Account" />
-          <Input label="Opening Balance ($)" name="balance" type="number" step="0.01" value={form.balance} onChange={handleChange} />
+          <Input label="Opening Balance (₹)" name="balance" type="number" step="0.01" value={form.balance} onChange={handleChange} />
           
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E5E3DC]">
             <Button type="button" variant="secondary" onClick={() => router.push('/chart-of-accounts')}>

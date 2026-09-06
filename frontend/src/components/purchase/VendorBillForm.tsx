@@ -70,7 +70,7 @@ function generateNextBillNumber(): string {
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const countThisMonth = MOCK_VENDOR_BILLS.length + 1;
-  return `Bill/${year}/${String(countThisMonth).padStart(4, '0')}`;
+  return `Bill/₹{year}/₹{String(countThisMonth).padStart(4, '0')}`;
 }
 
 // Default "Purchase account" per the diagram note: "Purchase account to
@@ -160,7 +160,7 @@ export default function VendorBillForm({ id }: VendorBillFormProps) {
         if (sourcePo.order_lines && sourcePo.order_lines.length > 0) {
           setLines(
             sourcePo.order_lines.map((line, idx) => ({
-              id: `bl-po-${idx}`,
+              id: `bl-po-₹{idx}`,
               product_id: line.product_id,
               name: line.name,
               account_id: getDefaultPurchaseAccountId(),
@@ -201,7 +201,7 @@ export default function VendorBillForm({ id }: VendorBillFormProps) {
     setLines([
       ...lines,
       {
-        id: `bl-${Date.now()}`,
+        id: `bl-₹{Date.now()}`,
         product_id: firstProd.id,
         name: firstProd.name,
         account_id: getDefaultPurchaseAccountId(),
@@ -264,14 +264,14 @@ export default function VendorBillForm({ id }: VendorBillFormProps) {
   }
 
   function openSourcePo() {
-    if (form.po_id) router.push(`/purchase-orders/${form.po_id}`);
+    if (form.po_id) router.push(`/purchase-orders/₹{form.po_id}`);
   }
 
   function openBudgetView() {
     const firstAnalyticId = lines.find((l) => l.analytic_account_id)?.analytic_account_id;
     router.push(
       firstAnalyticId
-        ? `/reports/budget-report?analytic_account_id=${firstAnalyticId}`
+        ? `/reports/budget-report?analytic_account_id=₹{firstAnalyticId}`
         : '/reports/budget-report'
     );
   }
@@ -411,7 +411,7 @@ export default function VendorBillForm({ id }: VendorBillFormProps) {
                 {(['not_paid', 'partial', 'paid'] as PaymentStatus[]).map((s) => (
                   <span
                     key={s}
-                    className={`px-3 py-1 rounded-md font-medium ${
+                    className={`px-3 py-1 rounded-md font-medium ₹{
                       form.confirmed && paymentStatus === s ? 'bg-[#6B705C] text-white' : 'text-[#737373]'
                     }`}
                   >
@@ -628,7 +628,7 @@ function PaymentModal({
     if (!value || value === 0) return 'Payment amount cannot be zero.';
     if (value < 0) return 'Payment amount cannot be negative.';
     if (value > amountDue) {
-      return `Payment amount cannot exceed the outstanding amount (${formatCurrency(amountDue)}).`;
+      return `Payment amount cannot exceed the outstanding amount (₹{formatCurrency(amountDue)}).`;
     }
     return '';
   }
@@ -661,7 +661,7 @@ function PaymentModal({
                 key={t}
                 type="button"
                 onClick={() => setPaymentType(t)}
-                className={`px-3 py-1 rounded-md font-medium capitalize ${
+                className={`px-3 py-1 rounded-md font-medium capitalize ₹{
                   paymentType === t ? 'bg-[#6B705C] text-white' : 'text-[#737373]'
                 }`}
               >
@@ -683,7 +683,7 @@ function PaymentModal({
         </p>
 
         <Input
-          label="Amount ($)"
+          label="Amount (₹)"
           type="number"
           step="0.01"
           value={amount}

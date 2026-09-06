@@ -119,7 +119,7 @@ export default function ContactForm({ id }: ContactFormProps) {
         Now shows only here: "New Contact" or "Edit Contact: {name}"
       */}
       <h1 className={ui.pageTitle}>
-        {isNew ? 'New Contact' : `Edit Contact: ${form.name}`}
+        {isNew ? 'New Contact' : `Edit Contact: ₹{form.name}`}
       </h1>
 
       <Card>

@@ -14,7 +14,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use((config) => {
   const token = getToken();
   if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ₹{token}`;
   }
   return config;
 });
@@ -61,7 +61,7 @@ export async function getUsers() {
 }
 
 export async function getUser(id: string) {
-  const res = await apiClient.get(`/users/${id}/`);
+  const res = await apiClient.get(`/users/₹{id}/`);
   return res.data;
 }
 
@@ -71,7 +71,7 @@ export async function createUser(data: unknown) {
 }
 
 export async function updateUser(id: string, data: unknown) {
-  const res = await apiClient.put(`/users/${id}/`, data);
+  const res = await apiClient.put(`/users/₹{id}/`, data);
   return res.data;
 }
 
@@ -82,7 +82,7 @@ export async function getContacts() {
 }
 
 export async function getContact(id: string) {
-  const res = await apiClient.get(`/contacts/${id}/`);
+  const res = await apiClient.get(`/contacts/₹{id}/`);
   return res.data;
 }
 
@@ -92,7 +92,7 @@ export async function createContact(data: unknown) {
 }
 
 export async function updateContact(id: string, data: unknown) {
-  const res = await apiClient.put(`/contacts/${id}/`, data);
+  const res = await apiClient.put(`/contacts/₹{id}/`, data);
   return res.data;
 }
 
@@ -103,7 +103,7 @@ export async function getProducts() {
 }
 
 export async function getProduct(id: string) {
-  const res = await apiClient.get(`/products/${id}/`);
+  const res = await apiClient.get(`/products/₹{id}/`);
   return res.data;
 }
 
@@ -113,7 +113,7 @@ export async function createProduct(data: unknown) {
 }
 
 export async function updateProduct(id: string, data: unknown) {
-  const res = await apiClient.put(`/products/${id}/`, data);
+  const res = await apiClient.put(`/products/₹{id}/`, data);
   return res.data;
 }
 
@@ -124,7 +124,7 @@ export async function getChartOfAccounts() {
 }
 
 export async function getAccount(id: string) {
-  const res = await apiClient.get(`/accounting/accounts/${id}/`);
+  const res = await apiClient.get(`/accounting/accounts/₹{id}/`);
   return res.data;
 }
 
@@ -134,7 +134,7 @@ export async function createAccount(data: unknown) {
 }
 
 export async function updateAccount(id: string, data: unknown) {
-  const res = await apiClient.put(`/accounting/accounts/${id}/`, data);
+  const res = await apiClient.put(`/accounting/accounts/₹{id}/`, data);
   return res.data;
 }
 
@@ -145,7 +145,7 @@ export async function getJournals() {
 }
 
 export async function getJournal(id: string) {
-  const res = await apiClient.get(`/accounting/journals/${id}/`);
+  const res = await apiClient.get(`/accounting/journals/₹{id}/`);
   return res.data;
 }
 
@@ -155,7 +155,7 @@ export async function createJournal(data: unknown) {
 }
 
 export async function updateJournal(id: string, data: unknown) {
-  const res = await apiClient.put(`/accounting/journals/${id}/`, data);
+  const res = await apiClient.put(`/accounting/journals/₹{id}/`, data);
   return res.data;
 }
 
@@ -166,7 +166,7 @@ export async function getJournalEntries() {
 }
 
 export async function getJournalEntry(id: string) {
-  const res = await apiClient.get(`/accounting/journal-entries/${id}/`);
+  const res = await apiClient.get(`/accounting/journal-entries/₹{id}/`);
   return res.data;
 }
 
@@ -176,7 +176,7 @@ export async function createJournalEntry(data: unknown) {
 }
 
 export async function updateJournalEntry(id: string, data: unknown) {
-  const res = await apiClient.put(`/accounting/journal-entries/${id}/`, data);
+  const res = await apiClient.put(`/accounting/journal-entries/₹{id}/`, data);
   return res.data;
 }
 
@@ -187,7 +187,7 @@ export async function getAnalyticAccounts() {
 }
 
 export async function getAnalyticAccount(id: string) {
-  const res = await apiClient.get(`/accounting/analytic-accounts/${id}/`);
+  const res = await apiClient.get(`/accounting/analytic-accounts/₹{id}/`);
   return res.data;
 }
 
@@ -197,7 +197,7 @@ export async function createAnalyticAccount(data: unknown) {
 }
 
 export async function updateAnalyticAccount(id: string, data: unknown) {
-  const res = await apiClient.put(`/accounting/analytic-accounts/${id}/`, data);
+  const res = await apiClient.put(`/accounting/analytic-accounts/₹{id}/`, data);
   return res.data;
 }
 
@@ -208,7 +208,7 @@ export async function getPurchaseOrders() {
 }
 
 export async function getPurchaseOrder(id: string) {
-  const res = await apiClient.get(`/purchase/orders/${id}/`);
+  const res = await apiClient.get(`/purchase/orders/₹{id}/`);
   return res.data;
 }
 
@@ -218,7 +218,7 @@ export async function createPurchaseOrder(data: unknown) {
 }
 
 export async function updatePurchaseOrder(id: string, data: unknown) {
-  const res = await apiClient.put(`/purchase/orders/${id}/`, data);
+  const res = await apiClient.put(`/purchase/orders/₹{id}/`, data);
   return res.data;
 }
 
@@ -229,7 +229,7 @@ export async function getVendorBills() {
 }
 
 export async function getVendorBill(id: string) {
-  const res = await apiClient.get(`/purchase/vendor-bills/${id}/`);
+  const res = await apiClient.get(`/purchase/vendor-bills/₹{id}/`);
   return res.data;
 }
 
@@ -239,13 +239,13 @@ export async function createVendorBill(data: unknown) {
 }
 
 export async function updateVendorBill(id: string, data: unknown) {
-  const res = await apiClient.put(`/purchase/vendor-bills/${id}/`, data);
+  const res = await apiClient.put(`/purchase/vendor-bills/₹{id}/`, data);
   return res.data;
 }
 
 export async function registerBillPayment(billIdOrData: string | unknown, data?: unknown) {
   if (typeof billIdOrData === 'string') {
-    const res = await apiClient.post(`/purchase/vendor-bills/${billIdOrData}/register-payment/`, data);
+    const res = await apiClient.post(`/purchase/vendor-bills/₹{billIdOrData}/register-payment/`, data);
     return res.data;
   }
   const res = await apiClient.post('/purchase/vendor-bills/register-payment/', billIdOrData);
@@ -259,7 +259,7 @@ export async function getSalesOrders() {
 }
 
 export async function getSalesOrder(id: string) {
-  const res = await apiClient.get(`/sales/orders/${id}/`);
+  const res = await apiClient.get(`/sales/orders/₹{id}/`);
   return res.data;
 }
 
@@ -269,7 +269,7 @@ export async function createSalesOrder(data: unknown) {
 }
 
 export async function updateSalesOrder(id: string, data: unknown) {
-  const res = await apiClient.put(`/sales/orders/${id}/`, data);
+  const res = await apiClient.put(`/sales/orders/₹{id}/`, data);
   return res.data;
 }
 
@@ -280,7 +280,7 @@ export async function getCustomerInvoices() {
 }
 
 export async function getCustomerInvoice(id: string) {
-  const res = await apiClient.get(`/sales/invoices/${id}/`);
+  const res = await apiClient.get(`/sales/invoices/₹{id}/`);
   return res.data;
 }
 
@@ -290,13 +290,13 @@ export async function createCustomerInvoice(data: unknown) {
 }
 
 export async function updateCustomerInvoice(id: string, data: unknown) {
-  const res = await apiClient.put(`/sales/invoices/${id}/`, data);
+  const res = await apiClient.put(`/sales/invoices/₹{id}/`, data);
   return res.data;
 }
 
 export async function registerInvoicePayment(invoiceIdOrData: string | unknown, data?: unknown) {
   if (typeof invoiceIdOrData === 'string') {
-    const res = await apiClient.post(`/sales/invoices/${invoiceIdOrData}/register-payment/`, data);
+    const res = await apiClient.post(`/sales/invoices/₹{invoiceIdOrData}/register-payment/`, data);
     return res.data;
   }
   const res = await apiClient.post('/sales/invoices/register-payment/', invoiceIdOrData);
@@ -310,7 +310,7 @@ export async function getPayments() {
 }
 
 export async function getPayment(id: string) {
-  const res = await apiClient.get(`/payments/${id}/`);
+  const res = await apiClient.get(`/payments/₹{id}/`);
   return res.data;
 }
 
@@ -320,7 +320,7 @@ export async function createPayment(data: unknown) {
 }
 
 export async function updatePayment(id: string, data: unknown) {
-  const res = await apiClient.put(`/payments/${id}/`, data);
+  const res = await apiClient.put(`/payments/₹{id}/`, data);
   return res.data;
 }
 
@@ -331,7 +331,7 @@ export async function getBudgets() {
 }
 
 export async function getBudget(id: string) {
-  const res = await apiClient.get(`/budgets/${id}/`);
+  const res = await apiClient.get(`/budgets/₹{id}/`);
   return res.data;
 }
 
@@ -341,6 +341,55 @@ export async function createBudget(data: unknown) {
 }
 
 export async function updateBudget(id: string, data: unknown) {
-  const res = await apiClient.put(`/budgets/${id}/`, data);
+  const res = await apiClient.put(`/budgets/₹{id}/`, data);
   return res.data;
+}
+
+// ============================================================
+// BUDGET WORKFLOW HELPERS
+// ============================================================
+//
+// FRONTEND ONLY:
+//
+// These helpers are intentionally local until the backend
+// exposes authoritative budget workflow/check endpoints.
+//
+// Do NOT use these as a replacement for backend validation.
+// Purchase Order confirmation must eventually be validated
+// by the backend.
+//
+
+export function calculateBudgetAvailability(
+  budgetAmount: number,
+  committedAmount: number
+) {
+  const budget = Number(budgetAmount) || 0;
+  const committed = Number(committedAmount) || 0;
+
+  return {
+    remaining: Math.max(
+      budget - committed,
+      0
+    ),
+
+    exceeded:
+      committed > budget,
+  };
+}
+
+export function calculateBudgetAchievement(
+  budgetAmount: number,
+  achievedAmount: number
+) {
+  const budget = Number(budgetAmount) || 0;
+  const achieved = Number(achievedAmount) || 0;
+
+  return {
+    percentage:
+      budget > 0
+        ? Math.round(
+            (achieved / budget) * 100
+          )
+        : 0,
+  };
 }

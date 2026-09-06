@@ -29,7 +29,7 @@ export default function JournalForm({ id }: { id: string }) {
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
-      <h1 className={ui.pageTitle}>{isNew ? 'New Accounting Journal' : `Edit Journal: ${form.name}`}</h1>
+      <h1 className={ui.pageTitle}>{isNew ? 'New Accounting Journal' : `Edit Journal: ₹{form.name}`}</h1>
       <Card>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input label="Journal Name" name="name" value={form.name} onChange={handleChange} required placeholder="e.g. Sales Invoices" />

@@ -1,62 +1,93 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Table from '@/components/ui/Table';
 import Badge from '@/components/ui/Badge';
-import { formatCurrency } from '@/lib/utils';
+import { getBudgets } from '@/lib/api';
+import { formatCurrency, formatDate } from '@/lib/utils';
+import type { Budget } from '@/types/budget';
 import { ui } from '@/lib/theme';
 
+const num = (v: unknown) => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+};
+
 export default function BudgetReport() {
-  const budgetLines = [
-    { name: 'Q3 Marketing & Campaigns', budget: 25000.00, practical: 18400.00, theoretical: 25000.00 },
-    { name: 'R&D Furniture Design 2026', budget: 60000.00, practical: 42000.00, theoretical: 50000.00 },
-    { name: 'Showroom Lease & Upgrades', budget: 35000.00, practical: 35000.00, theoretical: 35000.00 },
-  ];
+  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    getBudgets()
+      .then((data) => setBudgets(Array.isArray(data) ? data : []))
+      .catch((err) => {
+        console.error(err);
+        setError('Unable to load budget analytics.');
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const rows = useMemo(() => budgets.map((b) => {
+    const plannedLines = (b.lines ?? []).reduce((s, l) => s + num(l.planned_amount), 0);
+    const practical = (b.lines ?? []).reduce((s, l) => s + num(l.practical_amount), 0);
+    const planned = plannedLines > 0 ? plannedLines : num(b.total_amount);
+    return {
+      ...b,
+      planned,
+      practical,
+      percentage: planned > 0 ? Math.round((practical / planned) * 100) : 0,
+    };
+  }), [budgets]);
 
   return (
     <div className="space-y-6">
       <Card className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className={ui.pageTitle}>Budget Performance Analysis Report</h1>
-          <p className="text-xs text-[#737373] mt-1">Comparison of budgeted vs practical actual expenditure</p>
+          <p className="text-xs text-[#737373] mt-1">Planned budget vs practical achieved expenditure</p>
         </div>
         <Button variant="secondary" onClick={() => window.print()}>Export Report</Button>
       </Card>
 
-      <Card padding={false} className="overflow-hidden p-6">
-        <Table
-          columns={[
-            { key: 'name', header: 'Budget Position', render: (b) => <span className="font-semibold text-[#2C2C2C]">{b.name}</span> },
-            { key: 'budget', header: 'Planned Budget', render: (b) => <span className="font-mono font-medium text-[#2C2C2C]">{formatCurrency(b.budget)}</span> },
-            { key: 'practical', header: 'Practical Amount', render: (b) => <span className="font-mono text-[#3D7A4E] font-medium">{formatCurrency(b.practical)}</span> },
-            {
-              key: 'achievement',
-              header: 'Achievement %',
-              render: (b) => {
-                const pct = Math.round((b.practical / b.budget) * 100);
-                return (
+      <Card padding={false} className="overflow-hidden">
+        {loading ? (
+          <div className="p-6 text-sm text-[#737373]">Loading analytics...</div>
+        ) : error ? (
+          <div className="p-6 text-sm text-[#C0392B]">{error}</div>
+        ) : rows.length === 0 ? (
+          <div className="p-6 text-sm text-[#737373]">No budgets available.</div>
+        ) : (
+          <Table
+            columns={[
+              { key: 'name', header: 'Budget Position', render: (b) => <span className="font-semibold">{b.name}</span> },
+              { key: 'period', header: 'Period', render: (b) => <span className="text-xs text-[#737373]">{formatDate(b.date_from)} — {formatDate(b.date_to)}</span> },
+              { key: 'planned', header: 'Planned Budget', render: (b) => <span className="font-mono">{formatCurrency(b.planned)}</span> },
+              { key: 'practical', header: 'Practical Amount', render: (b) => <span className="font-mono text-[#3D7A4E]">{formatCurrency(b.practical)}</span> },
+              {
+                key: 'percentage',
+                header: 'Achievement %',
+                render: (b) => (
                   <div className="flex items-center gap-2">
-                    <div className="w-24 bg-[#E5E3DC] rounded-full h-2 overflow-hidden">
-                      <div className="bg-[#6B705C] h-full rounded-full" style={{ width: `${Math.min(pct, 100)}%` }} />
+                    <div className="w-24 h-2 rounded-full bg-[#E5E3DC] overflow-hidden">
+                      <div className="h-full rounded-full bg-[#6B705C]" style={{ width: `₹{Math.min(b.percentage, 100)}%` }} />
                     </div>
-                    <span className="text-xs font-mono font-semibold text-[#2C2C2C]">{pct}%</span>
+                    <span className="text-xs font-mono font-semibold">{b.percentage}%</span>
                   </div>
-                );
+                ),
               },
-            },
-            {
-              key: 'status',
-              header: 'Status',
-              render: (b) => {
-                const pct = (b.practical / b.budget) * 100;
-                return <Badge variant={pct >= 100 ? 'warning' : 'paid'}>{pct >= 100 ? 'Fully Spent' : 'On Track'}</Badge>;
+              {
+                key: 'status',
+                header: 'Status',
+                render: (b) => <Badge variant={b.percentage >= 100 ? 'warning' : 'paid'}>{b.percentage >= 100 ? 'Fully Spent' : 'On Track'}</Badge>,
               },
-            },
-          ]}
-          data={budgetLines}
-          keyExtractor={(b) => b.name}
-        />
+            ]}
+            data={rows}
+            keyExtractor={(b) => b.id}
+          />
+        )}
       </Card>
     </div>
   );
