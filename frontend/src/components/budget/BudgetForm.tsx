@@ -536,7 +536,7 @@ export default function BudgetForm({ id }: { id: string }) {
             <div className="flex flex-wrap items-center gap-2 mt-3">
 
               <div
-                className={`rounded-lg px-3 py-2 text-xs font-medium ₹{
+                className={`rounded-lg px-3 py-2 text-xs font-medium ${
                   form.state === 'draft'
                     ? 'bg-[#66734A] text-white'
                     : 'bg-[#F1F0EA] text-[#737373]'
@@ -550,7 +550,7 @@ export default function BudgetForm({ id }: { id: string }) {
               </span>
 
               <div
-                className={`rounded-lg px-3 py-2 text-xs font-medium ₹{
+                className={`rounded-lg px-3 py-2 text-xs font-medium ${
                   form.state === 'confirm'
                     ? 'bg-[#66734A] text-white'
                     : 'bg-[#F1F0EA] text-[#737373]'
@@ -564,7 +564,7 @@ export default function BudgetForm({ id }: { id: string }) {
               </span>
 
               <div
-                className={`rounded-lg px-3 py-2 text-xs font-medium ₹{
+                className={`rounded-lg px-3 py-2 text-xs font-medium ${
                   form.state === 'revised'
                     ? 'bg-[#A58A45] text-white'
                     : 'bg-[#F1F0EA] text-[#737373]'
@@ -578,7 +578,7 @@ export default function BudgetForm({ id }: { id: string }) {
               </span>
 
               <div
-                className={`rounded-lg px-3 py-2 text-xs font-medium ₹{
+                className={`rounded-lg px-3 py-2 text-xs font-medium ${
                   form.state === 'cancel'
                     ? 'bg-[#C0392B] text-white'
                     : 'bg-[#F1F0EA] text-[#737373]'
@@ -638,7 +638,7 @@ export default function BudgetForm({ id }: { id: string }) {
                     handleChange
                   }
                   disabled={!canEdit}
-                  className={`₹{ui.select} ₹{
+                  className={`${ui.select} ${
                     !canEdit
                       ? 'opacity-60 cursor-not-allowed'
                       : ''
@@ -736,7 +736,7 @@ export default function BudgetForm({ id }: { id: string }) {
                   </label>
 
                   <div className="mt-1 rounded-lg border border-[#E5E3DC] bg-white px-3 py-2.5 text-sm font-medium text-[#2C2C2C]">
-                    ₹
+                    $
                     {originalAmount.toLocaleString(
                       'en-IN',
                       {
@@ -775,7 +775,7 @@ export default function BudgetForm({ id }: { id: string }) {
                     </span>
 
                     <span className="text-sm font-semibold text-[#2C2C2C]">
-                      ₹
+                      $
                       {effectiveAmount.toLocaleString(
                         'en-IN',
                         {
@@ -817,7 +817,7 @@ export default function BudgetForm({ id }: { id: string }) {
                   </p>
 
                   <p className="mt-1 text-sm font-semibold text-[#2C2C2C]">
-                    ₹
+                    $
                     {effectiveAmount.toLocaleString(
                       'en-IN'
                     )}

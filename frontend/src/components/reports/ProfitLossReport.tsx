@@ -48,7 +48,7 @@ export default function ProfitLossReport() {
             columns={[
               { key: 'code', header: 'Code', render: (r) => <span className="font-mono text-xs text-[#737373]">{r.code}</span> },
               { key: 'name', header: 'Account', render: (r) => <span className="font-medium text-[#2C2C2C]">{r.name}</span> },
-              { key: 'amount', header: 'Total (₹)', render: (r) => <span className="font-mono font-medium text-[#2C2C2C]">{formatCurrency(r.amount)}</span> },
+              { key: 'amount', header: 'Total ($)', render: (r) => <span className="font-mono font-medium text-[#2C2C2C]">{formatCurrency(r.amount)}</span> },
             ]}
             data={revenueData}
             keyExtractor={(r) => r.code}
@@ -66,7 +66,7 @@ export default function ProfitLossReport() {
             columns={[
               { key: 'code', header: 'Code', render: (r) => <span className="font-mono text-xs text-[#737373]">{r.code}</span> },
               { key: 'name', header: 'Account', render: (r) => <span className="font-medium text-[#2C2C2C]">{r.name}</span> },
-              { key: 'amount', header: 'Total (₹)', render: (r) => <span className="font-mono font-medium text-[#2C2C2C]">{formatCurrency(r.amount)}</span> },
+              { key: 'amount', header: 'Total ($)', render: (r) => <span className="font-mono font-medium text-[#2C2C2C]">{formatCurrency(r.amount)}</span> },
             ]}
             data={expenseData}
             keyExtractor={(r) => r.code}

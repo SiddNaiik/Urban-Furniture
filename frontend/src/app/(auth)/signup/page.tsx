@@ -216,7 +216,7 @@ export default function SignupPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Create a strong password"
-              className={`h-12 w-full rounded-xl border bg-white px-4 pr-12 text-sm text-[#2C2C2C] outline-none transition placeholder:text-[#A3A09A] focus:ring-4 focus:ring-[#6B705C]/10 ₹{
+              className={`h-12 w-full rounded-xl border bg-white px-4 pr-12 text-sm text-[#2C2C2C] outline-none transition placeholder:text-[#A3A09A] focus:ring-4 focus:ring-[#6B705C]/10 ${
                 password.length > 0 && !isPasswordValid
                   ? "border-red-300 focus:border-red-400"
                   : "border-[#DCD9D0] focus:border-[#6B705C]"
@@ -296,7 +296,7 @@ export default function SignupPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm your password"
-              className={`h-12 w-full rounded-xl border bg-white px-4 pr-12 text-sm text-[#2C2C2C] outline-none transition placeholder:text-[#A3A09A] focus:ring-4 focus:ring-[#6B705C]/10 ₹{
+              className={`h-12 w-full rounded-xl border bg-white px-4 pr-12 text-sm text-[#2C2C2C] outline-none transition placeholder:text-[#A3A09A] focus:ring-4 focus:ring-[#6B705C]/10 ${
                 confirmPassword.length > 0 && !passwordsMatch
                   ? "border-red-300 focus:border-red-400"
                   : "border-[#DCD9D0] focus:border-[#6B705C]"
@@ -425,7 +425,7 @@ function PasswordRule({
 }) {
   return (
     <p
-      className={`flex items-center gap-2 text-xs font-medium ₹{
+      className={`flex items-center gap-2 text-xs font-medium ${
         valid ? "text-[#6B705C]" : "text-red-500"
       }`}
     >

@@ -34,7 +34,7 @@ export default function JournalList() {
         ]}
         data={filtered}
         keyExtractor={(j) => j.id}
-        onRowClick={(j) => router.push(`/journals/₹{j.id}`)}
+        onRowClick={(j) => router.push(`/journals/${j.id}`)}
       />
     </div>
   );

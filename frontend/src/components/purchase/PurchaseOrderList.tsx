@@ -45,7 +45,7 @@ export default function PurchaseOrderList() {
         ]}
         data={filtered}
         keyExtractor={(o) => o.id}
-        onRowClick={(o) => router.push(`/purchase-orders/₹{o.id}`)}
+        onRowClick={(o) => router.push(`/purchase-orders/${o.id}`)}
       />
     </div>
   );

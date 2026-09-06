@@ -30,7 +30,7 @@ export default function BudgetPieChart({ planned, achieved, remaining }: Props) 
         <div
           className="relative h-36 w-36 rounded-full shrink-0"
           style={{
-            background: `conic-gradient(#6B705C 0deg ₹{angle}deg, #E5E3DC ₹{angle}deg 360deg)`,
+            background: `conic-gradient(#6B705C 0deg ${angle}deg, #E5E3DC ${angle}deg 360deg)`,
           }}
         >
           <div className="absolute inset-5 rounded-full bg-white border border-[#E5E3DC] flex flex-col items-center justify-center">

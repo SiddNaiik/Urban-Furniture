@@ -117,7 +117,7 @@ export default function ContactList() {
           columns={columns}
           data={filtered}
           keyExtractor={(c) => c.id}
-          onRowClick={(c) => router.push(`/contacts/₹{c.id}`)}
+          onRowClick={(c) => router.push(`/contacts/${c.id}`)}
         />
       ) : (
         <ContactKanban contacts={filtered} />

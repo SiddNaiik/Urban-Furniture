@@ -83,11 +83,11 @@ function EditProductModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={ui.label}>Sales Price (₹)</label>
+              <label className={ui.label}>Sales Price ($)</label>
               <input className={ui.input} type="number" step="0.01" name="sales_price" value={form.sales_price} onChange={handleChange} required />
             </div>
             <div>
-              <label className={ui.label}>Cost (₹)</label>
+              <label className={ui.label}>Cost ($)</label>
               <input className={ui.input} type="number" step="0.01" name="cost" value={form.cost} onChange={handleChange} required />
             </div>
           </div>

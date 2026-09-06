@@ -10,7 +10,7 @@ export function setToken(token: string): void {
   localStorage.setItem('access_token', token);
   // Set cookie for 7 days
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
-  document.cookie = `access_token=₹{token}; expires=₹{expires}; path=/; SameSite=Lax`;
+  document.cookie = `access_token=${token}; expires=${expires}; path=/; SameSite=Lax`;
 }
 
 export function removeToken(): void {

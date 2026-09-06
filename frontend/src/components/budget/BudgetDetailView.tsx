@@ -259,7 +259,7 @@ export default function BudgetDetailView({
                 variant="secondary"
                 onClick={() =>
                   router.push(
-                    `/budgets/₹{id}/edit`
+                    `/budgets/${id}/edit`
                   )
                 }
               >
@@ -339,7 +339,7 @@ export default function BudgetDetailView({
               <Button
                 onClick={() =>
                   router.push(
-                    `/budgets/₹{id}/edit`
+                    `/budgets/${id}/edit`
                   )
                 }
               >
@@ -353,7 +353,7 @@ export default function BudgetDetailView({
                 variant="secondary"
                 onClick={() =>
                   router.push(
-                    `/budgets/₹{id}/edit`
+                    `/budgets/${id}/edit`
                   )
                 }
               >
@@ -691,7 +691,7 @@ export default function BudgetDetailView({
                         <div
                           className="h-full rounded-full bg-[#6B705C]"
                           style={{
-                            width: `₹{Math.min(
+                            width: `${Math.min(
                               percentage,
                               100
                             )}%`,

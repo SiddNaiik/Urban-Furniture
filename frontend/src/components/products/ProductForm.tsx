@@ -71,7 +71,7 @@ export default function ProductForm({ id }: ProductFormProps) {
 
   function handleConfirmNewCategory() {
     if (!newCategoryName.trim()) return;
-    const newCat = { id: `cat-₹{Date.now()}`, name: newCategoryName.trim() };
+    const newCat = { id: `cat-${Date.now()}`, name: newCategoryName.trim() };
     setCategories((prev) => [...prev, newCat]);
     setForm((prev) => ({ ...prev, category_id: newCat.id }));
     setNewCategoryName('');
@@ -97,7 +97,7 @@ export default function ProductForm({ id }: ProductFormProps) {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className={ui.pageTitle}>{isNew ? 'New Product' : `Edit Product: ₹{form.name}`}</h1>
+        <h1 className={ui.pageTitle}>{isNew ? 'New Product' : `Edit Product: ${form.name}`}</h1>
       </div>
       <Card>
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -152,7 +152,7 @@ export default function ProductForm({ id }: ProductFormProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
-              label="Sales Price (₹)"
+              label="Sales Price ($)"
               name="sales_price"
               type="number"
               step="0.01"
@@ -161,7 +161,7 @@ export default function ProductForm({ id }: ProductFormProps) {
               required
             />
             <Input
-              label="Cost (₹)"
+              label="Cost ($)"
               name="cost"
               type="number"
               step="0.01"

@@ -63,7 +63,7 @@ export default function PaymentList() {
             ]}
           />
           <Input label="Partner (Customer / Vendor)" placeholder="e.g. Azure Interior" required />
-          <Input label="Amount (₹)" type="number" step="0.01" placeholder="1000.00" required />
+          <Input label="Amount ($)" type="number" step="0.01" placeholder="1000.00" required />
           <Select
             label="Payment Journal"
             options={[

@@ -72,7 +72,7 @@ export default function BudgetReport() {
                 render: (b) => (
                   <div className="flex items-center gap-2">
                     <div className="w-24 h-2 rounded-full bg-[#E5E3DC] overflow-hidden">
-                      <div className="h-full rounded-full bg-[#6B705C]" style={{ width: `₹{Math.min(b.percentage, 100)}%` }} />
+                      <div className="h-full rounded-full bg-[#6B705C]" style={{ width: `${Math.min(b.percentage, 100)}%` }} />
                     </div>
                     <span className="text-xs font-mono font-semibold">{b.percentage}%</span>
                   </div>
