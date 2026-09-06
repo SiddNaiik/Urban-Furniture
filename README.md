@@ -64,4 +64,3 @@ A full-stack business accounting platform for managing contacts, products, sales
 - Backend code: backend/app
 - Frontend code: frontend/src
 
-If you'd like, I can also add example `.env` files, a contributor guide, or update the `frontend/README.md` and `backend/README.md` with more detailed commands.
