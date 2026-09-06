@@ -276,6 +276,8 @@ export default function VendorBillForm({ id }: VendorBillFormProps) {
     );
   }
 
+  const totalAmount = lines.reduce((acc, l) => acc + (l.amount || 0), 0);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);

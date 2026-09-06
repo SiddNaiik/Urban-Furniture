@@ -153,6 +153,8 @@ export default function PurchaseOrderForm({ id }: PurchaseOrderFormProps) {
     router.push(`/vendor-bills/new?po_id=${id}`);
   }
 
+  const totalAmount = lines.reduce((acc, l) => acc + (l.subtotal || 0), 0);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
