@@ -333,3 +333,52 @@ export async function updateBudget(id: string, data: unknown) {
   const res = await apiClient.put(`/budgets/${id}/`, data);
   return res.data;
 }
+
+// ============================================================
+// BUDGET WORKFLOW HELPERS
+// ============================================================
+//
+// FRONTEND ONLY:
+//
+// These helpers are intentionally local until the backend
+// exposes authoritative budget workflow/check endpoints.
+//
+// Do NOT use these as a replacement for backend validation.
+// Purchase Order confirmation must eventually be validated
+// by the backend.
+//
+
+export function calculateBudgetAvailability(
+  budgetAmount: number,
+  committedAmount: number
+) {
+  const budget = Number(budgetAmount) || 0;
+  const committed = Number(committedAmount) || 0;
+
+  return {
+    remaining: Math.max(
+      budget - committed,
+      0
+    ),
+
+    exceeded:
+      committed > budget,
+  };
+}
+
+export function calculateBudgetAchievement(
+  budgetAmount: number,
+  achievedAmount: number
+) {
+  const budget = Number(budgetAmount) || 0;
+  const achieved = Number(achievedAmount) || 0;
+
+  return {
+    percentage:
+      budget > 0
+        ? Math.round(
+            (achieved / budget) * 100
+          )
+        : 0,
+  };
+}
