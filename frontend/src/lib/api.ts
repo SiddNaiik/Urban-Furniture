@@ -33,13 +33,13 @@ apiClient.interceptors.response.use(
 );
 
 // Auth
-export async function login(email: string, password: string) {
-  const res = await apiClient.post('/auth/login/', { email, password });
+export async function login(login_id: string, password: string) {
+  const res = await apiClient.post('/auth/login', { login_id, password });
   return res.data;
 }
 
-export async function signup(name: string, email: string, password: string) {
-  const res = await apiClient.post('/auth/signup/', { name, email, password });
+export async function signup(name: string, login_id: string, email: string, password: string) {
+  const res = await apiClient.post('/auth/signup', { name, login_id, email, password });
   return res.data;
 }
 

@@ -1,13 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { signup } from "@/lib/api";
 
 export default function SignupPage() {
   const router = useRouter();
 
   const [name, setName] = useState("");
+  const [loginId, setLoginId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,6 +18,7 @@ export default function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   /* =====================================================
      PASSWORD VALIDATION
@@ -39,17 +42,23 @@ export default function SignupPage() {
     confirmPassword.length > 0 &&
     password === confirmPassword;
 
+  const isLoginIdValid = loginId.length >= 6 && loginId.length <= 12;
+
   /* =====================================================
      SUBMIT
   ===================================================== */
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setError("");
 
     if (!name.trim()) {
       setError("Please enter your full name.");
+      return;
+    }
+
+    if (!isLoginIdValid) {
+      setError("Login ID must be between 6 and 12 characters.");
       return;
     }
 
@@ -68,29 +77,24 @@ export default function SignupPage() {
       return;
     }
 
-    /*
-      FUTURE BACKEND INTEGRATION:
-
-      const response = await authApi.signup({
-        name,
-        email,
-        password,
-      });
-
-      if (!response.success) {
-        setError(response.message);
-        return;
+    setSubmitting(true);
+    try {
+      await signup(name.trim(), loginId.trim(), email.trim().toLowerCase(), password);
+      router.push("/login?signup=success");
+    } catch (err: unknown) {
+      const errorData = (err as { response?: { data?: { detail?: string | Array<{ msg: string }>; message?: string } } })?.response?.data;
+      let msg = "Signup failed. Please try again.";
+      if (typeof errorData?.detail === "string") {
+        msg = errorData.detail;
+      } else if (Array.isArray(errorData?.detail) && errorData.detail.length > 0) {
+        msg = errorData.detail.map((d) => d.msg).join(", ");
+      } else if (errorData?.message) {
+        msg = errorData.message;
       }
-    */
-
-    console.log("User created:", {
-      name,
-      email,
-      password,
-    });
-
-    // After successful account creation → Login
-    router.push("/login");
+      setError(msg);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -166,6 +170,40 @@ export default function SignupPage() {
             placeholder="Enter your full name"
             className="h-12 w-full rounded-xl border border-[#DCD9D0] bg-white px-4 text-sm text-[#2C2C2C] outline-none transition placeholder:text-[#A3A09A] focus:border-[#6B705C] focus:ring-4 focus:ring-[#6B705C]/10"
           />
+
+        </div>
+
+
+        {/* LOGIN ID */}
+
+        <div>
+
+          <label
+            htmlFor="loginId"
+            className="mb-1.5 block text-sm font-semibold text-[#2C2C2C]"
+          >
+            Login ID <span className="font-normal text-[#737373]">(6–12 characters)</span>
+          </label>
+
+          <input
+            id="loginId"
+            name="loginId"
+            type="text"
+            autoComplete="username"
+            value={loginId}
+            onChange={(e) => setLoginId(e.target.value)}
+            minLength={6}
+            maxLength={12}
+            placeholder="Choose a Login ID (6–12 chars)"
+            className={`h-12 w-full rounded-xl border bg-white px-4 text-sm text-[#2C2C2C] outline-none transition placeholder:text-[#A3A09A] focus:ring-4 focus:ring-[#6B705C]/10 ${
+              loginId.length > 0 && !isLoginIdValid
+                ? "border-red-300 focus:border-red-400"
+                : "border-[#DCD9D0] focus:border-[#6B705C]"
+            }`}
+          />
+          {loginId.length > 0 && !isLoginIdValid && (
+            <p className="mt-1 text-xs font-medium text-red-500">Login ID must be 6–12 characters</p>
+          )}
 
         </div>
 
@@ -367,12 +405,13 @@ export default function SignupPage() {
 
         <div className="grid grid-cols-2 gap-3 pt-1">
 
-          {/* SIgn Up */}
+          {/* Sign Up */}
           <button
             type="submit"
-            className="h-12 rounded-xl bg-[#6B705C] px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#59604E] focus:outline-none focus:ring-4 focus:ring-[#6B705C]/20 active:scale-[0.99]"
+            disabled={submitting}
+            className="h-12 rounded-xl bg-[#6B705C] px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#59604E] focus:outline-none focus:ring-4 focus:ring-[#6B705C]/20 active:scale-[0.99] disabled:opacity-60"
           >
-            SIgn Up
+            {submitting ? "Creating account…" : "Sign Up"}
           </button>
           <Link
             href="/login"

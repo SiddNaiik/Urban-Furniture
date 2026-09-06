@@ -42,7 +42,8 @@ def create_contact(
         state=contact_data.state,
         country=contact_data.country,
         pincode=contact_data.pincode,
-        image_url=contact_data.image_url
+        image_url=contact_data.image_url,
+        created_by=current_user.id,
     )
 
     db.add(new_contact)

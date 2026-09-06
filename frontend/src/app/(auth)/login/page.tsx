@@ -1,48 +1,57 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-export default function LoginPage() {
+import { useAuthContext } from "@/context/AuthContext";
+import { login as apiLogin } from "@/lib/api";
+
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { login } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    login_id: "",
     password: "",
   });
-  /* 
-     LOGIN
-   */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  useEffect(() => {
+    if (searchParams.get("signup") === "success") {
+      setSuccessMessage("Account created successfully! Please log in.");
+    }
+  }, [searchParams]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    const email = formData.email.trim();
+    const login_id = formData.login_id.trim();
     const password = formData.password;
-    if (!email || !password) {
-      setError("Please enter your email and password.");
+    if (!login_id || !password) {
+      setError("Please enter your Login ID and password.");
       return;
     }
-    /*
-      FUTURE BACKEND INTEGRATION:
-      const response = await authApi.login({
-        email,
-        password,
-      });
-      if (!response.success) {
-        setError(response.message);
-        return;
+    setLoading(true);
+    try {
+      const data = await apiLogin(login_id, password);
+      login(data.access_token, data.user);
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      const errorData = (err as { response?: { data?: { detail?: string | Array<{ msg: string }>; message?: string } } })?.response?.data;
+      let msg = "Invalid Login ID or password.";
+      if (typeof errorData?.detail === "string") {
+        msg = errorData.detail;
+      } else if (Array.isArray(errorData?.detail) && errorData.detail.length > 0) {
+        msg = errorData.detail.map((d) => d.msg).join(", ");
+      } else if (errorData?.message) {
+        msg = errorData.message;
       }
-      auth.setToken(response.token);
-    */
-    // Temporary frontend login
-    console.log("Login:", {
-      email,
-      password,
-      rememberMe,
-    });
-    // Successful login → Dashboard
-    router.push("/dashboard");
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="w-full">
@@ -92,30 +101,30 @@ export default function LoginPage() {
         =================================================== */}
         <div>
           <label
-            htmlFor="email"
+            htmlFor="login_id"
             className="mb-2 block text-base font-semibold text-[#2C2C2C]"
           >
-            Email
+            Login ID
           </label>
           <div className="relative">
-            {/* Email Icon */}
+            {/* User Icon */}
             <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#858585]">
-              <EmailIcon />
+              <UserIcon />
             </div>
             <input
-              id="email"
-              name="email"
-              type="email"
+              id="login_id"
+              name="login_id"
+              type="text"
               required
-              autoComplete="email"
-              value={formData.email}
+              autoComplete="username"
+              value={formData.login_id}
               onChange={(event) =>
                 setFormData({
                   ...formData,
-                  email: event.target.value,
+                  login_id: event.target.value,
                 })
               }
-              placeholder="Enter your email"
+              placeholder="Enter your Login ID"
               className="h-14 w-full rounded-xl border border-[#DCD8D0] bg-white pl-12 pr-4 text-base text-[#2C2C2C] outline-none transition placeholder:text-[#A0A0A0] focus:border-[#6B705C] focus:ring-4 focus:ring-[#6B705C]/10"
             />
           </div>
@@ -183,6 +192,14 @@ export default function LoginPage() {
           </div>
         </div>
         {/* ===================================================
+            SUCCESS MESSAGE
+        =================================================== */}
+        {successMessage && (
+          <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {successMessage}
+          </div>
+        )}
+        {/* ===================================================
             ERROR
         =================================================== */}
         {error && (
@@ -191,29 +208,14 @@ export default function LoginPage() {
           </div>
         )}
         {/* ===================================================
-            REMEMBER ME
-        =================================================== */}
-        <label className="flex cursor-pointer items-center gap-3">
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={(event) =>
-              setRememberMe(event.target.checked)
-            }
-            className="h-4 w-4 rounded border-[#CFCBC3] accent-[#6B705C]"
-          />
-          <span className="text-sm font-medium text-[#737373]">
-            Remember me
-          </span>
-        </label>
-        {/* ===================================================
             LOGIN BUTTON
         =================================================== */}
         <button
           type="submit"
-          className="h-14 w-full rounded-xl bg-[#6B705C] text-base font-semibold text-white shadow-sm transition hover:bg-[#59604E] focus:outline-none focus:ring-4 focus:ring-[#6B705C]/20 active:scale-[0.99]"
+          disabled={loading}
+          className="h-14 w-full rounded-xl bg-[#6B705C] text-base font-semibold text-white shadow-sm transition hover:bg-[#59604E] focus:outline-none focus:ring-4 focus:ring-[#6B705C]/20 active:scale-[0.99] disabled:opacity-60"
         >
-          Log In
+          {loading ? "Signing in…" : "Log In"}
         </button>
       </form>
       {/* 
@@ -236,28 +238,36 @@ export default function LoginPage() {
     </div>
   );
 }
-function EmailIcon() {
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-sm text-[#737373]">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+/* ====
+   USER ICON
+==== */
+function UserIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       className="h-5 w-5"
     >
-      <rect
-        x="3"
-        y="5"
-        width="18"
-        height="14"
-        rx="2"
+      <circle
+        cx="12"
+        cy="8"
+        r="4"
         stroke="currentColor"
         strokeWidth="1.7"
       />
       <path
-        d="M4 7L12 13L20 7"
+        d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
         stroke="currentColor"
         strokeWidth="1.7"
         strokeLinecap="round"
-        strokeLinejoin="round"
       />
     </svg>
   );

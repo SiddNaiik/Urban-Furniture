@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { User } from '@/types/user';
 import { getToken, setToken, removeToken } from '@/lib/auth';
+import { getUsers } from '@/lib/api';
 
 interface AuthContextType {
   user: User | null;
@@ -22,16 +23,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const token = getToken();
-    const storedUser = localStorage.getItem('user');
-    if (token && storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    // Re-validate token against backend on every page load / refresh
+    getUsers()
+      .then((me: User) => {
+        setUser(me);
+        localStorage.setItem('user', JSON.stringify(me));
+      })
+      .catch(() => {
         removeToken();
         localStorage.removeItem('user');
-      }
-    }
-    setLoading(false);
+        setUser(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const login = (token: string, newUser: User) => {

@@ -13,14 +13,32 @@ from app.schemas.auth import (
     UserSignupRequest,
 )
 
-router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+router = APIRouter(tags=["Authentication"])
 
 
 @router.post(
-    "/signup",
+    "/api/auth/signup",
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Public user signup",
+)
+@router.post(
+    "/api/auth/signup/",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+    include_in_schema=False,
+)
+@router.post(
+    "/auth/signup",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+    include_in_schema=False,
+)
+@router.post(
+    "/auth/signup/",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+    include_in_schema=False,
 )
 def signup(body: UserSignupRequest, db: Session = Depends(get_db)):
     """
@@ -68,10 +86,28 @@ def signup(body: UserSignupRequest, db: Session = Depends(get_db)):
 
 
 @router.post(
-    "/login",
+    "/api/auth/login",
     response_model=TokenResponse,
     status_code=status.HTTP_200_OK,
     summary="User login",
+)
+@router.post(
+    "/api/auth/login/",
+    response_model=TokenResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
+)
+@router.post(
+    "/auth/login",
+    response_model=TokenResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
+)
+@router.post(
+    "/auth/login/",
+    response_model=TokenResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
 )
 def login(body: LoginRequest, db: Session = Depends(get_db)):
     """
@@ -107,10 +143,28 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/me",
+    "/api/auth/me",
     response_model=UserResponse,
     status_code=status.HTTP_200_OK,
     summary="Get current user profile",
+)
+@router.get(
+    "/api/auth/me/",
+    response_model=UserResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
+)
+@router.get(
+    "/auth/me",
+    response_model=UserResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
+)
+@router.get(
+    "/auth/me/",
+    response_model=UserResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
 )
 def get_me(current_user: User = Depends(get_current_user)):
     """
