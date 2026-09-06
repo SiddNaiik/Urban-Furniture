@@ -12,6 +12,7 @@ export interface Product {
   category_id: string;
   category?: string; // resolved category name for display
   sales_price: number;
+  standard_price?: number;
   cost: number;
   image_url?: string | null;
   is_active: boolean;
