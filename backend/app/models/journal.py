@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Enum
 from sqlalchemy.sql import func
 
 from app.db import Base
@@ -11,7 +11,11 @@ class Journal(Base):
 
     name = Column(String(100), nullable=False, unique=True, index=True)
 
-    journal_type = Column(String(20), nullable=False, index=True)
+    journal_type = Column(
+        Enum("sales", "purchase", "bank", "cash", name="journal_type_enum"),
+        nullable=False,
+        index=True
+    )
 
     default_account_id = Column(
         Integer,
