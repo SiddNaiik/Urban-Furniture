@@ -124,10 +124,10 @@ export default function PurchaseOrderForm({ id }: PurchaseOrderFormProps) {
     setLines(lines.filter((_, i) => i !== index));
   }
 
-  const totalAmount = useMemo(
-    () => lines.reduce((acc, l) => acc + (l.subtotal || 0), 0),
-    [lines]
-  );
+  // const totalAmount = useMemo(
+  //   () => lines.reduce((acc, l) => acc + (l.subtotal || 0), 0),
+  //   [lines]
+  // );
 
   // Non-blocking check: does any line exceed its analytic account's
   // remaining approved budget?
